@@ -1,0 +1,27 @@
+{
+  "name": "agro-platform",
+  "version": "1.0.0",
+  "description": "A smart agriculture platform",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vinfinit/agro-platform.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vinfinit/agro-platform/issues"
+  },
+  "homepage": "https://github.com/vinfinit/agro-platform#readme",
+  "dependencies": {
+    "next": "^9.0.5",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0"
+  }
+}
