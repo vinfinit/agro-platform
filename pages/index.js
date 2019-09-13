@@ -1,6 +1,10 @@
+import AgroMap from '../components/AgroMap'
+
+import styles from '../styles/main.scss'
+
 const Index = () => (
-  <div>
-    <p>Hello Next.js</p>
+  <div className={styles.mapContainer}>
+    <AgroMap />
   </div>
 );
 
