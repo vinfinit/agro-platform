@@ -1,7 +1,9 @@
 import { GoogleMap, LoadScript } from '@react-google-maps/api'
-import { GMAP_API_KEY } from "../config";
+import { GMAP_API_KEY } from '../config'
 
-const AgroMap = () => (
+import FlaxCluster from './FlaxCluster'
+
+const AgroMap = (props) => (
   <LoadScript
     id="script-loader"
     googleMapsApiKey={GMAP_API_KEY}
@@ -11,7 +13,7 @@ const AgroMap = () => (
       id="agro-platform-map"
       mapContainerStyle={{
         height: "100%",
-        width: "100%"
+        width: "80%"
       }}
       zoom={6}
       center={{
@@ -19,6 +21,7 @@ const AgroMap = () => (
         lng: 27.592
       }}
     >
+      <FlaxCluster data={props.data} />
     </GoogleMap>
   </LoadScript>
 );
