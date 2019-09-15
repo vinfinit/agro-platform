@@ -9,12 +9,22 @@ class ControlPanel extends Component {
     super(props);
 
     this.state = {
-      data: props.data
+      clusters: props.clusters
     }
   }
 
+  static getDerivedStateFromProps(props, cur_state) {
+    if (cur_state.clusters !== props.clusters) {
+      return {
+        clusters: props.clusters
+      }
+    }
+    return null
+  }
+
   onToggle = (node, toggled) => {
-    const { cursor, data } = this.state;
+    console.log(node)
+    const { cursor, items } = this.state;
     if (cursor) {
       this.setState(() => ({ cursor, active: false }));
     }
@@ -22,17 +32,17 @@ class ControlPanel extends Component {
       node.active = toggled;
       node.toggled = toggled;
     }
-    this.setState(() => ({ cursor: node, data }));
+    this.setState(() => ({ cursor: node, items }));
   }
 
   render() {
     return (
       <aside className={styles.controlPanel}>
         {
-          this.state.data.map((item, index) => (
+          this.state.clusters.map((cluster, c_index) => (
             <Treebeard 
-              key={index} 
-              data={item} 
+              key={c_index} 
+              data={cluster} 
               onToggle={this.onToggle}
               style={theme}
             />
