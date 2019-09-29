@@ -4,10 +4,6 @@ import { MarkerClusterer, Marker } from '@react-google-maps/api';
 class FlaxCluster extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      items: props.items
-    }
   }
 
   render() {
@@ -20,13 +16,13 @@ class FlaxCluster extends Component {
         imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
       }}>
         {
-          (clusterer) => this.props.items.map((item, index) => (
+          (clusterer) => this.props.nodes.map((node, index) => (
             <Marker
               key={index}
-              position={item.location}
+              position={node.location}
               clusterer={clusterer}
-              icon={item.active ? activeMarker : passiveMarker}
-              onClick={() => this.props.itemOnClick(index)}
+              icon={node.active ? activeMarker : passiveMarker}
+              onClick={() => this.props.nodeOnClick(node)}
             />
           ))
         }

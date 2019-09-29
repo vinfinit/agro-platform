@@ -1,12 +1,11 @@
 import { LoadScript } from '@react-google-maps/api'
+import fetch from 'isomorphic-unfetch'
+
+import { API_URL } from '../utils/constants'
 import { GMAP_API_KEY } from '../config'
 
 import AgroMap from '../components/AgroMap'
-
 import styles from '../styles/main.scss'
-
-import belarusFlax from '../data/belarus'
-import belgiumFlax from '../data/belgium'
 
 const Index = props => (
   <div className={styles.container}>
@@ -15,22 +14,20 @@ const Index = props => (
       googleMapsApiKey={GMAP_API_KEY}
       libraries={['geometry', 'drawing']}
     >
-      <AgroMap items={props.data} />      
+      <AgroMap nodes={props.data} />      
     </LoadScript>
   </div>
 );
 
 Index.getInitialProps = async () => {
+  const res = await fetch(`${API_URL}/api/cluster/5d90aa2b9d768a3b165f0c16`);
+  const cluster = await res.json();
+
+  console.log(cluster)
   return {
-    data: [{
-      name: 'Belarus',
-      toggled: false,
-      children: belarusFlax
-    }, {
-      name: 'Belgium',
-      toggled: false,
-      children: belgiumFlax
-    }]
+    data: [
+      cluster
+    ]
   }
 }
 

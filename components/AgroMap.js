@@ -9,29 +9,18 @@ class AgroMap extends Component {
     super(props);
 
     this.state = {
-      clusters: props.items
+      cursor: null,
+      nodes: props.nodes
     }
   }
 
-  itemOnClick = (n_cluster) => (index) => {
-    console.log('onclick', n_cluster, index)
+  nodeOnClick = (node) => {
     console.log(this.state)
-    this.setState(prevState => {
-      const changedCluster = prevState.clusters[n_cluster].children.map((item, j) => {
-        if(index === j) {
-          return Object.assign({}, item, {active: !item.active})
-        }
-        return item
-      });
-      return {
-        clusters: prevState.clusters.map((cluster, j_cluster) => {
-          if(n_cluster === j_cluster) {
-            return Object.assign({}, cluster, {children: changedCluster})
-          }
-          return cluster
-        })
-      } 
-    })
+    const { cursor } = this.state;
+    if (node.children) {
+      node.toggled = toggled;
+    }
+    this.setState(() => ({ cursor: node, clusters: [...clusters] }));
   }
 
   render() {
@@ -49,19 +38,15 @@ class AgroMap extends Component {
             lng: 27.592
           }}
         >
-          {
-            this.state.clusters.map((item, c_index) => (
-              <FlaxCluster 
-                key={c_index} 
-                items={item.children} 
-                itemOnClick={this.itemOnClick(c_index)} 
-              />
-            ))
-          }
+          <FlaxCluster 
+            cursor={this.state.cursor}
+            nodes={this.state.nodes} 
+            nodeOnClick={this.nodeOnClick} 
+          />
         </GoogleMap>
         <ControlPanel 
-          clusters={this.state.clusters}
-          itemOnClick={this.itemOnClick} 
+          cursor={this.state.cursor}
+          nodes={this.state.nodes}
         />
       </Fragment>
     )
