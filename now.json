@@ -2,8 +2,7 @@
   "name": "agro-platform",
   "version": 2,
   "env": {
-    "API_URL": "@api-url",
-    "MONGODB_URI": "@mongodb-uri",
-    "GMAP_API_KEY": "@gmap-api-key"
+    "API_URL": "@agro-api-url",
+    "MONGODB_URI": "@agro-mongodb-uri"
   }
 }
