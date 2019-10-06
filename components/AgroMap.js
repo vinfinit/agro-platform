@@ -1,6 +1,7 @@
 import { Fragment, Component } from 'react'
 import { GoogleMap } from '@react-google-maps/api'
 
+import AgroDrawingManager from './AgroDrawingManager'
 import ControlPanel from './ControlPanel'
 import FlaxCluster from './FlaxCluster'
 
@@ -15,12 +16,12 @@ class AgroMap extends Component {
   }
 
   nodeOnClick = (node) => {
-    console.log(this.state)
-    const { cursor } = this.state;
-    if (node.children) {
-      node.toggled = toggled;
-    }
-    this.setState(() => ({ cursor: node, clusters: [...clusters] }));
+    // console.log(this.state)
+    // const { cursor } = this.state;
+    // if (node.children) {
+    //   node.toggled = toggled;
+    // }
+    // this.setState(() => ({ cursor: node, clusters: [...clusters] }));
   }
 
   render() {
@@ -43,6 +44,7 @@ class AgroMap extends Component {
             nodes={this.state.nodes} 
             nodeOnClick={this.nodeOnClick} 
           />
+          <AgroDrawingManager />
         </GoogleMap>
         <ControlPanel 
           cursor={this.state.cursor}
