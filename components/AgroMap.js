@@ -10,9 +10,27 @@ class AgroMap extends Component {
     super(props);
 
     this.state = {
-      cursor: null,
-      nodes: props.nodes
+      center: {
+        lat: 53.768,
+        lng: 27.592
+      },
+      cluster: props.cluster,
+      fields: props.cluster.fields,
     }
+  }
+
+  saveField = async (field) => {
+    const clusterId = '5d90aa2b9d768a3b165f0c16';
+    const fields = [
+      ...this.state.fields, field,
+    ];
+    console.log(this.state.fields);
+    await fetch(`/api/cluster/${clusterId}`, {
+      method: 'POST',
+      body: JSON.stringify({ fields }),
+    });
+
+    this.setState({ fields: [...fields, field] })
   }
 
   nodeOnClick = (node) => {
@@ -34,21 +52,19 @@ class AgroMap extends Component {
             width: "80%"
           }}
           zoom={6}
-          center={{
-            lat: 53.768,
-            lng: 27.592
-          }}
+          center={this.state.center}
         >
           <FlaxCluster 
-            cursor={this.state.cursor}
-            nodes={this.state.nodes} 
+            cluster={this.state.cluster} 
             nodeOnClick={this.nodeOnClick} 
           />
-          <AgroDrawingManager />
+          <AgroDrawingManager 
+            polygons={this.state.fields}
+            savePolygon={this.saveField}
+          />
         </GoogleMap>
         <ControlPanel 
-          cursor={this.state.cursor}
-          nodes={this.state.nodes}
+          cluster={this.state.cluster}
         />
       </Fragment>
     )

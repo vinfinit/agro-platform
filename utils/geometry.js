@@ -17,8 +17,13 @@ const getCenter = (polygon) => {
   return bounds.getCenter()
 }
 
+const getBounds = (polygon) => {
+  return polygon.getPath().getArray()
+}
+
 module.exports = {
   round,
   getArea,
   getCenter,
+  getBounds,
 }

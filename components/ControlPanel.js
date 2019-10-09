@@ -19,16 +19,15 @@ class ControlPanel extends Component {
   }
 
   render() {
+    const cluster = this.props.cluster;
+
     return (
       <aside className={styles.controlPanel}>
         {
-          this.props.nodes.map((node, key) => (
-            <TreeNode 
-              key={key} 
-              name={node.name}
-              fields={node.fields}
-            ></TreeNode>
-          ))
+          <TreeNode 
+            name={cluster.name}
+            fields={cluster.fields}
+          />
         }
       </aside>
     )

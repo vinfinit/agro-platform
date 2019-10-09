@@ -1,9 +1,9 @@
 import { Fragment, Component } from 'react'
-import { DrawingManager, Polygon, InfoWindow } from '@react-google-maps/api'
-import { round, getArea, getCenter } from '../utils/geometry'
-import { HARVESTER_SIZE } from '../utils/constants'
+import { DrawingManager, Polygon, GoogleMap } from '@react-google-maps/api'
+import AgroInfoWindow from './AgroInfoWindow'
 
-import styles from '../styles/main.scss'
+import { round, getArea, getCenter, getBounds } from '../utils/geometry'
+import { HARVESTER_SIZE } from '../utils/constants'
 
 const drawingOptions = {
   drawingControlOptions: {
@@ -48,11 +48,14 @@ class AgroDrawingManager extends Component {
     }
   }
 
-  openInfoWindow = (polygon) => () => {
+  openInfoWindow = (polygon, index, isSaved = false) => () => {
     this.setState({
       curPolygon: {
+        isSaved,
+        index,
         position: getCenter(polygon),
         area: getArea(polygon),
+        bounds: getBounds(polygon),
       }
     }, this.calculateMetrics);
   }
@@ -63,42 +66,57 @@ class AgroDrawingManager extends Component {
     })
   }
 
+  savePolygon = async () => {
+    const polygon = this.state.curPolygon.bounds.map(p => ({
+      lat: p.lat(),
+      lng: p.lng(),
+    }));
+
+    const newPolygons = [...this.state.polygons];
+    newPolygons.splice(this.state.curPolygon.index, 1);
+
+    this.setState({
+      curPolygon: null,
+      polygons: newPolygons,
+    });
+
+    await this.props.savePolygon(polygon)
+  }
+
   render() {
+    const savedPolygons = this.props
+      .polygons.map(paths => new google.maps.Polygon({ paths }));
+
     return (
       <Fragment>
         <DrawingManager
           onPolygonComplete={this.onPolygonComplete}
           options={drawingOptions}
         />
+        {savedPolygons.map((polygon, i) => (
+          <Polygon 
+            key={i}
+            path={polygon.getPath()}
+            onClick={this.openInfoWindow(polygon, i, true)}
+          />
+        ))}
         {this.state.polygons.map((polygon, i) => (
           <Polygon 
             key={i}
             path={polygon.getPath()}
-            onClick={this.openInfoWindow(polygon)}
+            options={drawingOptions.polygonOptions}
+            onClick={this.openInfoWindow(polygon, i)}
           />
         ))}
         {this.state.curPolygon && 
-          <InfoWindow 
-            position={this.state.curPolygon.position}
-            onCloseClick={this.closeInfoWindow}
-          >
-            <section className={styles.infoWindow}>
-              <header>
-                <button type="button">Save (WIP)</button>
-              </header>
-              <div>
-                <p>Area: {round(this.state.curPolygon.area / 10000)} ha</p>
-                <p>Harvester size: 
-                  <input 
-                    value={this.state.harvesterSize}
-                    onChange={this.updateHarvesterSize}
-                  />
-                  m
-                </p>
-                <p>Total distance: {round(this.state.totalDistance / 1000)} km</p>
-              </div>
-            </section>
-          </InfoWindow>
+          <AgroInfoWindow 
+            polygon={this.state.curPolygon}
+            harvesterSize={this.state.harvesterSize}
+            totalDistance={this.state.totalDistance}
+            onHarvesterSizeChange={this.updateHarvesterSize}
+            onSave={this.savePolygon}
+            onClose={this.closeInfoWindow}
+          />
         }
       </Fragment>
     )

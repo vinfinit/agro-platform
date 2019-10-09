@@ -14,7 +14,7 @@ const Index = props => (
       googleMapsApiKey={GMAP_API_KEY}
       libraries={['geometry', 'drawing']}
     >
-      <AgroMap nodes={props.data} />      
+      <AgroMap cluster={props.cluster} />      
     </LoadScript>
   </div>
 );
@@ -24,11 +24,7 @@ Index.getInitialProps = async () => {
   const cluster = await res.json();
 
   console.log(cluster)
-  return {
-    data: [
-      cluster
-    ]
-  }
+  return { cluster }
 }
 
 export default Index;
