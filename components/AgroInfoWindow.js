@@ -12,7 +12,7 @@ const AgroInfoWindow = (props) => (
       <header>
         {props.polygon.isSaved
           ? <span>Saved!</span>
-          : <button type="button" onClick={props.onSave}>Save (WIP)</button>
+          : <button type="button" onClick={props.onSave}>Save</button>
         }
       </header>
       <div>

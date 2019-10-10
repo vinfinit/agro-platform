@@ -10,7 +10,6 @@ const getCluster = async (req, res) => {
 const updateCluster = async (req, res) => {
   const { clusterId } = req.query;
   const body = JSON.parse(req.body);
-  console.log(body);
   await insertFields({ id: clusterId, fields: body.fields });
   res.status(CREATED).send('OK')
 }

@@ -5,6 +5,8 @@ import AgroDrawingManager from './AgroDrawingManager'
 import ControlPanel from './ControlPanel'
 import FlaxCluster from './FlaxCluster'
 
+import { API_URL } from '../utils/constants'
+
 class AgroMap extends Component {
   constructor(props) {
     super(props);
@@ -14,17 +16,31 @@ class AgroMap extends Component {
         lat: 53.768,
         lng: 27.592
       },
-      cluster: props.cluster,
-      fields: props.cluster.fields,
+      fields: [],
+    };
+
+    this.loadFields(this.props.cluster._id)
+  }
+
+  async componentDidUpdate(prevProps, prevState) {
+    const curClusterId = this.props.cluster._id;
+    if (curClusterId  !== prevProps.cluster._id) {
+      this.loadFields(curClusterId)
     }
   }
 
+  loadFields = async (clusterId) => {
+    const res = await fetch(`${API_URL}/api/cluster/${clusterId}`);
+    const { fields } = await res.json();
+    this.setState({ fields: fields || [] })
+  }
+
   saveField = async (field) => {
-    const clusterId = '5d90aa2b9d768a3b165f0c16';
+    const clusterId = this.props.cluster._id;
     const fields = [
       ...this.state.fields, field,
     ];
-    console.log(this.state.fields);
+
     await fetch(`/api/cluster/${clusterId}`, {
       method: 'POST',
       body: JSON.stringify({ fields }),
@@ -55,7 +71,7 @@ class AgroMap extends Component {
           center={this.state.center}
         >
           <FlaxCluster 
-            cluster={this.state.cluster} 
+            cluster={this.props.cluster} 
             nodeOnClick={this.nodeOnClick} 
           />
           <AgroDrawingManager 
@@ -63,9 +79,9 @@ class AgroMap extends Component {
             savePolygon={this.saveField}
           />
         </GoogleMap>
-        <ControlPanel 
+        {/* <ControlPanel 
           cluster={this.state.cluster}
-        />
+        /> */}
       </Fragment>
     )
   }
