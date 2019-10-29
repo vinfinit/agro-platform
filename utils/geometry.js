@@ -1,13 +1,14 @@
-const round = (n, precision=2) => {
-  const factor = Math.pow(10, precision);
-  return Math.round(n * factor) / factor
-}
+import { round as turfRound } from '@turf/turf'
 
-// compute area in m
-const getArea = (polygon) => {
-  const area = google.maps.geometry.spherical.computeArea(polygon.getPath());
-  return area
-}
+const round = (n, precision=2) => turfRound(n || 0, precision);
+
+// compute area in m^2
+const computeArea = (polygon) =>
+  google.maps.geometry.spherical.computeArea(polygon.getPath());
+
+// compute length between pointA and pointB in m
+const computeLength = (pointA, pointB) => 
+  google.maps.geometry.spherical.computeLength([pointA, pointB]);
 
 const getCenter = (polygon) => {
   let bounds = new google.maps.LatLngBounds();
@@ -21,9 +22,18 @@ const getBounds = (polygon) => {
   return polygon.getPath().getArray()
 }
 
+const arcTangent = (k) => {
+  return Math.atan(k) * 180 / Math.PI
+}
+
+const Point = (x, y) => new google.maps.LatLng(x, y);
+
 module.exports = {
   round,
-  getArea,
+  computeArea,
+  computeLength,
   getCenter,
   getBounds,
+  arcTangent,
+  Point,
 }

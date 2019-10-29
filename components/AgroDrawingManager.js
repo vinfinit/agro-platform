@@ -1,8 +1,9 @@
 import { Fragment, Component } from 'react'
 import { DrawingManager, Polygon, GoogleMap } from '@react-google-maps/api'
+import StrokeFill from './StrokeFill'
 import AgroInfoWindow from './AgroInfoWindow'
 
-import { round, getArea, getCenter, getBounds } from '../utils/geometry'
+import { round, computeArea, getCenter, getBounds } from '../utils/geometry'
 import { HARVESTER_SIZE } from '../utils/constants'
 
 const drawingOptions = {
@@ -51,10 +52,11 @@ class AgroDrawingManager extends Component {
   openInfoWindow = (polygon, index, isSaved = false) => () => {
     this.setState({
       curPolygon: {
+        polygon,
         isSaved,
         index,
         position: getCenter(polygon),
-        area: getArea(polygon),
+        area: computeArea(polygon),
         bounds: getBounds(polygon),
       }
     }, this.calculateMetrics);
@@ -116,6 +118,11 @@ class AgroDrawingManager extends Component {
             onHarvesterSizeChange={this.updateHarvesterSize}
             onSave={this.savePolygon}
             onClose={this.closeInfoWindow}
+          />
+        }
+        {this.state.curPolygon && 
+          <StrokeFill 
+            polygon={this.state.curPolygon.polygon}
           />
         }
       </Fragment>
