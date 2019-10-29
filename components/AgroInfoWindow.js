@@ -11,7 +11,13 @@ const AgroInfoWindow = (props) => (
     <section className={styles.infoWindow}>
       <header>
         {props.polygon.isSaved
-          ? <span>Saved!</span>
+          ? <div>
+              <span>Saved!</span>
+              <button 
+                className={styles.infoWindowDelete} 
+                type="button" 
+                onClick={props.onDelete}>Delete</button>
+            </div>
           : <button type="button" onClick={props.onSave}>Save</button>
         }
       </header>

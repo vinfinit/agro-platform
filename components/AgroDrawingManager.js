@@ -11,6 +11,12 @@ const drawingOptions = {
     drawingModes: ['polygon']
   },
   polygonOptions: {
+    fillColor: '#c004ff',
+    fillOpacity: 0.4,
+    strokeColor: '#8a04ff',
+    strokeWeight: 2
+  },
+  savedPolygonOptions: {
     fillColor: '#04fbff',
     fillOpacity: 0.4,
     strokeColor: '#02d5ff',
@@ -81,8 +87,17 @@ class AgroDrawingManager extends Component {
       curPolygon: null,
       polygons: newPolygons,
     });
-
     await this.props.savePolygon(polygon)
+  }
+
+  deletePolygon = async () => {
+    const polygon = this.state.curPolygon.bounds.map(p => ({
+      lat: p.lat(),
+      lng: p.lng(),
+    }));
+
+    this.setState({ curPolygon: null });
+    await this.props.deletePolygon(polygon)
   }
 
   render() {
@@ -99,6 +114,7 @@ class AgroDrawingManager extends Component {
           <Polygon 
             key={i}
             path={polygon.getPath()}
+            options={drawingOptions.savedPolygonOptions}
             onClick={this.openInfoWindow(polygon, i, true)}
           />
         ))}
@@ -117,6 +133,7 @@ class AgroDrawingManager extends Component {
             totalDistance={this.state.totalDistance}
             onHarvesterSizeChange={this.updateHarvesterSize}
             onSave={this.savePolygon}
+            onDelete={this.deletePolygon}
             onClose={this.closeInfoWindow}
           />
         }

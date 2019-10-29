@@ -68,7 +68,7 @@ class StrokeFill extends Component {
     return { north, south, east, west }
   }
 
-  computeLatLngSteps = ({ north, south, east, west }, k, nMaxSteps = 100) => {
+  computeLatLngSteps = ({ north, south, east, west }, k, nMaxSteps = 75) => {
     let lat_step, lng_step, n_lat_steps, n_lng_steps;
     if (k > 0) {
       lat_step = (north - south) / nMaxSteps;

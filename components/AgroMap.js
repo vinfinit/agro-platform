@@ -49,6 +49,24 @@ class AgroMap extends Component {
     this.setState({ fields: [...fields, field] })
   }
 
+  deleteField = async (field) => {
+    const clusterId = this.props.cluster._id;
+    const fieldIndex = this.state.fields.findIndex(savedField => {
+      if (JSON.stringify(savedField) === JSON.stringify(field)) {
+        return savedField
+      }
+    });
+    const fields = [...this.state.fields];
+    fields.splice(fieldIndex, 1);
+
+    await fetch(`/api/cluster/${clusterId}`, {
+      method: 'POST',
+      body: JSON.stringify({ fields }),
+    });
+
+    this.setState({ fields })
+  }
+
   nodeOnClick = (node) => {
     // console.log(this.state)
     // const { cursor } = this.state;
@@ -77,6 +95,7 @@ class AgroMap extends Component {
           <AgroDrawingManager 
             polygons={this.state.fields}
             savePolygon={this.saveField}
+            deletePolygon={this.deleteField}
           />
         </GoogleMap>
         {/* <ControlPanel 
