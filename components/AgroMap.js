@@ -83,7 +83,7 @@ class AgroMap extends Component {
           id="agro-platform-map"
           mapContainerStyle={{
             height: "100%",
-            width: "80%"
+            width: "70%"
           }}
           zoom={6}
           center={this.state.center}
@@ -98,9 +98,7 @@ class AgroMap extends Component {
             deletePolygon={this.deleteField}
           />
         </GoogleMap>
-        {/* <ControlPanel 
-          cluster={this.state.cluster}
-        /> */}
+        <ControlPanel />
       </Fragment>
     )
   }

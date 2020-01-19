@@ -100,6 +100,13 @@ class AgroDrawingManager extends Component {
     await this.props.deletePolygon(polygon)
   }
 
+  projectSegments = (projectionLen, originLen) => {
+    this.setState({
+      nLines: projectionLen / 2 / this.state.harvesterSize,
+      efficiency: projectionLen / originLen,
+    })
+  }
+
   render() {
     const savedPolygons = this.props
       .polygons.map(paths => new google.maps.Polygon({ paths }));
@@ -131,6 +138,8 @@ class AgroDrawingManager extends Component {
             polygon={this.state.curPolygon}
             harvesterSize={this.state.harvesterSize}
             totalDistance={this.state.totalDistance}
+            nLines={this.state.nLines}
+            efficiency={this.state.efficiency}
             onHarvesterSizeChange={this.updateHarvesterSize}
             onSave={this.savePolygon}
             onDelete={this.deletePolygon}
@@ -139,7 +148,9 @@ class AgroDrawingManager extends Component {
         }
         {this.state.curPolygon && 
           <StrokeFill 
+            key={this.state.curPolygon.index}
             polygon={this.state.curPolygon.polygon}
+            projectSegments={this.projectSegments}
           />
         }
       </Fragment>

@@ -1,13 +1,18 @@
 import { Component, Fragment } from 'react'
 import { Polyline, Rectangle } from '@react-google-maps/api'
 import { polygon as turfPolygon, lineString, lineIntersect } from '@turf/turf'
-import { arcTangent, computeLength, Point } from '../utils/geometry'
+import { cos, tangent, arcTangent, computeLength, Point } from '../utils/geometry'
 
 const ANGLE_WINDOW = 5;
 
 class StrokeFill extends Component {
   constructor(props) {
     super(props);
+
+    this.projectSegmentsData = {
+      projectionLen: 0,
+      originLen: 0,
+    }
   }
 
   splitPolygonIntoSegments = polygon => {
@@ -49,12 +54,6 @@ class StrokeFill extends Component {
     );
 
     return biggestCluster
-  }
-
-  calculateTangent = polygon => {
-    const segments = this.splitPolygonIntoSegments(polygon);
-    const biggestCluster = this.findBiggestSegmentCluster(segments);
-    return biggestCluster.k
   }
 
   wrapPolygonIntoRectangle = polygon => {
@@ -128,11 +127,47 @@ class StrokeFill extends Component {
       .map(intersection => intersection.map(([ lat, lng ]) => new Point(lat, lng)))
   }
 
+  getNormal = (k) => {
+    const degrees = arcTangent(k);
+    return tangent(degrees + 90)
+  }
+
+  projectPolygonToNormal = (segments, n, k) => {
+    const kDegrees = arcTangent(k);
+    const nDegrees = arcTangent(n);
+    const segmentsForProjection = [];
+
+    segments.forEach(segment => {
+      if (!(segment.angle - ANGLE_WINDOW <= kDegrees &&
+        kDegrees <= segment.angle + ANGLE_WINDOW
+      )) {
+        segmentsForProjection.push(segment)
+      }
+    });
+
+    let [projectionLen, originLen] = [0, 0];
+    segmentsForProjection.forEach(segment => {
+      projectionLen += cos(segment.angle - nDegrees) * segment.length;
+      originLen += segment.length;
+    });
+
+    return [projectionLen, originLen];
+  }
+
+  componentDidMount() {
+    this.props.projectSegments(this.projectSegmentsData.projectionLen, this.projectSegmentsData.originLen);
+  }
+
   render() {
     const rectWrapper = this.wrapPolygonIntoRectangle(this.props.polygon);
-    const k = this.calculateTangent(this.props.polygon);
+    const polygonSegments = this.splitPolygonIntoSegments(this.props.polygon);
+    const { k } = this.findBiggestSegmentCluster(polygonSegments);
     const directionSegments = this.generateDirectionSegments(rectWrapper, k);
     const intersectSegments = this.computeIntersectSegments(directionSegments, this.props.polygon);
+
+    const n = this.getNormal(k);
+    const [projectionLen, originLen] = this.projectPolygonToNormal(polygonSegments, n, k);
+    this.projectSegmentsData = { projectionLen, originLen };
 
     return (
       <Fragment>

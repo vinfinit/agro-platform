@@ -26,6 +26,14 @@ const arcTangent = (k) => {
   return Math.atan(k) * 180 / Math.PI
 }
 
+const tangent = (degrees) => {
+  return Math.tan(degrees * Math.PI/180)
+}
+
+const cos = (degrees) => {
+  return Math.cos(degrees * Math.PI/180)
+}
+
 const Point = (x, y) => new google.maps.LatLng(x, y);
 
 module.exports = {
@@ -35,5 +43,7 @@ module.exports = {
   getCenter,
   getBounds,
   arcTangent,
+  tangent,
+  cos,
   Point,
 }

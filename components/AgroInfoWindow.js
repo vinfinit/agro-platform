@@ -22,15 +22,17 @@ const AgroInfoWindow = (props) => (
         }
       </header>
       <div>
-        <p>Area: {round(props.polygon.area / 10000)} ha</p>
-        <p>Harvester size: 
+        <p>Площадь: {round(props.polygon.area / 10000)} ha</p>
+        <p>Ширина комбайна: 
           <input 
             value={props.harvesterSize}
             onChange={props.onHarvesterSizeChange}
           />
           m
         </p>
-        <p>Total distance: {round(props.totalDistance / 1000)} km</p>
+        <p>Полезное расстояние: {round(props.totalDistance / 1000)} km</p>
+        <p>Количество борозд: {parseInt(props.nLines)}</p>
+        <p>КПД поля: {round(props.efficiency)}</p>
       </div>
     </section>
   </InfoWindow>

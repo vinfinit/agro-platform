@@ -1,0 +1,36 @@
+.controlPanel {
+  flex-basis: 30%;
+  overflow: auto;
+  padding: 0 5px;
+
+  ul, ol {
+    padding-inline-start: 30px;
+  }
+
+  :global {
+    .ui.menu {
+      display: flex;
+      border: 1px solid rgba(34,36,38,.15);
+      text-align: center;
+
+      .item {
+        flex: 1;
+        padding: 13px 5px;
+        cursor: pointer;
+      
+        &.active {
+          background-color: #bbb;
+        }
+
+        &:hover {
+          background-color: #eee;
+        }
+      }
+    }
+  }
+
+  .hidden {
+    display: none;
+  }
+}
+
