@@ -2,6 +2,12 @@ body {
   margin: 0;
 }
 
+:global {
+  .hidden {
+    display: none;
+  }
+}
+
 .header {
   padding: 5px;
 }
@@ -21,6 +27,13 @@ body {
   background-color: white;
   border: 1px solid #ccc;
   padding: 5px;
+}
+
+.infoWindowBody {
+  > div {
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+  }
 }
 
 .infoWindowDelete {

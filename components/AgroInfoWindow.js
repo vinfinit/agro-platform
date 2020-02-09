@@ -1,15 +1,27 @@
+import { useState } from 'react'
 import { InfoWindow } from '@react-google-maps/api'
 
 import { round } from '../utils/geometry'
 import styles from '../styles/main.scss'
 
+const numberMask = (handler) => 
+  (e) => {
+    const re = /^[0-9.]+$/;
+    if (e.target.value === '' || re.test(e.target.value)) {
+      handler(e.target.value)
+    }
+  }
+
 const AgroInfoWindow = (props) => {
+  const [obstaclesDistance, setObstaclesDistance] = useState(100);
+  const [obstaclesTime, setObstaclesTime] = useState(30);
+
   const totalDistance = props.totalDistance / 1000;
   const workingTime = totalDistance / props.workingSpeed;
   const turnsDistance = (props.nLines ? props.nLines - 1 : 0) * props.singleTurnDistance / 1000;
   const auxiliaryTime = turnsDistance / props.turnSpeed;
-  const efficiencyDistance = totalDistance / (totalDistance + turnsDistance);
-  const efficiencyTime = workingTime / (workingTime + auxiliaryTime);
+  const efficiencyDistance = totalDistance / (totalDistance + turnsDistance + obstaclesDistance/1000);
+  const efficiencyTime = workingTime / (workingTime + auxiliaryTime + obstaclesTime/60);
 
   return (
     <InfoWindow 
@@ -29,37 +41,51 @@ const AgroInfoWindow = (props) => {
             : <button type="button" onClick={props.onSave}>Save</button>
           }
         </header>
-        <div>
-          <p>Площадь: {round(props.polygon.area / 10000)} га</p>
-          <p>Ширина захвата: 
+        <div className={styles.infoWindowBody}>
+          <div>Площадь: {round(props.polygon.area / 10000)} га</div>
+          <div>Ширина захвата: 
             <input 
               value={props.harvesterSize}
               onChange={props.onHarvesterSizeChange}
             />
             m
-          </p>
-          <p>Рабочий ход: {round(totalDistance)} км</p>
-          <p>Средняя длина гона: {round(totalDistance / props.nLines)} км</p>
-          <p>Количество проходов: {parseInt(props.nLines)}</p>
-          <p>Рабочая скорость: 
+          </div>
+          <div>Рабочий ход: {round(totalDistance)} км</div>
+          <div>Средняя длина гона: {round(totalDistance / props.nLines)} км</div>
+          <div>Количество проходов: {parseInt(props.nLines)}</div>
+          <div>Рабочая скорость: 
             <input 
               value={props.workingSpeed}
               onChange={props.onWorkingSpeedChange}
             />
             km/h
-          </p>
-          <p>Чистое рабочее время: {round(workingTime)} ч</p>
-          <p>Повороты: {round(turnsDistance)} км</p>
-          <p>Скорость на поворотах:
+          </div>
+          <div>Чистое рабочее время: {round(workingTime)} ч</div>
+          <div>Повороты: {round(turnsDistance)} км</div>
+          <div>Скорость на поворотах:
             <input 
               value={props.turnSpeed}
               onChange={props.onTurnSpeedChange}
             />
             km/h
-          </p>
-          <p>Вспомогательное время: {round(auxiliaryTime)} ч</p>
-          <p>КПД по расстоянию: {round(efficiencyDistance * 100)} %</p>
-          <p>КПД по времени: {round(efficiencyTime * 100)} %</p>
+          </div>
+          <div>Вспомогательное время: {round(auxiliaryTime)} ч</div>
+          <div>Доп. расстояние на препятствия:
+            <input 
+              value={obstaclesDistance}
+              onChange={numberMask(setObstaclesDistance)}
+            />
+            м
+          </div>
+          <div>Доп. время на препятствия:
+            <input 
+              value={obstaclesTime}
+              onChange={numberMask(setObstaclesTime)}
+            />
+            мин
+          </div>
+          <div>КПД по расстоянию: {round(efficiencyDistance * 100)} %</div>
+          <div>КПД по времени: {round(efficiencyTime * 100)} %</div>
         </div>
       </section>
     </InfoWindow>
