@@ -147,7 +147,7 @@ class StrokeFill extends Component {
 
     let [projectionLen, originLen] = [0, 0];
     segmentsForProjection.forEach(segment => {
-      projectionLen += cos(segment.angle - nDegrees) * segment.length;
+      projectionLen += Math.abs(cos(segment.angle - nDegrees) * segment.length);
       originLen += segment.length;
     });
 

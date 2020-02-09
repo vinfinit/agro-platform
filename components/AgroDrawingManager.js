@@ -4,7 +4,11 @@ import StrokeFill from './StrokeFill'
 import AgroInfoWindow from './AgroInfoWindow'
 
 import { round, computeArea, getCenter, getBounds } from '../utils/geometry'
-import { HARVESTER_SIZE } from '../utils/constants'
+import { 
+  HARVESTER_SIZE, 
+  WORKING_SPEED, 
+  TURN_SPEED,
+} from '../utils/constants'
 
 const drawingOptions = {
   drawingControlOptions: {
@@ -32,6 +36,8 @@ class AgroDrawingManager extends Component {
       polygons: [],
       curPolygon: null,
       harvesterSize: HARVESTER_SIZE,
+      workingSpeed: WORKING_SPEED,
+      turnSpeed: TURN_SPEED,
     }
   }
 
@@ -45,13 +51,36 @@ class AgroDrawingManager extends Component {
   calculateMetrics = () => {
     const state = this.state;
     const totalDistance = round(state.curPolygon.area / +state.harvesterSize);
-    this.setState({ totalDistance });
+    const singleTurnDistance = (+state.harvesterSize * 105) / 14 + 34;
+    this.setState({ 
+      totalDistance,
+      singleTurnDistance,
+     });
+    if (state.projectSegments) {
+      this.setState({
+        nLines: state.projectSegments.projectionLen / 2 / state.harvesterSize,
+      })
+    }
   }
 
   updateHarvesterSize = (e) => {
     const re = /^[0-9.]+$/;
     if (e.target.value === '' || re.test(e.target.value)) {
       this.setState({ harvesterSize: e.target.value }, this.calculateMetrics)
+    }
+  }
+
+  updateWorkingSpeed = (e) => {
+    const re = /^[0-9.]+$/;
+    if (e.target.value === '' || re.test(e.target.value)) {
+      this.setState({ workingSpeed: e.target.value }, this.calculateMetrics)
+    }
+  }
+
+  updateTurnSpeed = (e) => {
+    const re = /^[0-9.]+$/;
+    if (e.target.value === '' || re.test(e.target.value)) {
+      this.setState({ turnSpeed: e.target.value }, this.calculateMetrics)
     }
   }
 
@@ -102,9 +131,8 @@ class AgroDrawingManager extends Component {
 
   projectSegments = (projectionLen, originLen) => {
     this.setState({
-      nLines: projectionLen / 2 / this.state.harvesterSize,
-      efficiency: projectionLen / originLen,
-    })
+      projectSegments: { projectionLen, originLen },
+    }, this.calculateMetrics)
   }
 
   render() {
@@ -137,10 +165,14 @@ class AgroDrawingManager extends Component {
           <AgroInfoWindow 
             polygon={this.state.curPolygon}
             harvesterSize={this.state.harvesterSize}
+            workingSpeed={this.state.workingSpeed}
+            turnSpeed={this.state.turnSpeed}
             totalDistance={this.state.totalDistance}
+            singleTurnDistance={this.state.singleTurnDistance}
             nLines={this.state.nLines}
-            efficiency={this.state.efficiency}
             onHarvesterSizeChange={this.updateHarvesterSize}
+            onWorkingSpeedChange={this.updateWorkingSpeed}
+            onTurnSpeedChange={this.updateTurnSpeed}
             onSave={this.savePolygon}
             onDelete={this.deletePolygon}
             onClose={this.closeInfoWindow}
