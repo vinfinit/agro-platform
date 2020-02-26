@@ -19,12 +19,14 @@ const findById = async id => {
   return await collection.findOne(filter)
 }
 
-const findAll = async () => {
+const findAll = async (ids = [], role = '') => {
   const db = await connectToDatabase()
   const collection = await db.collection(CLUSTERS_COLLECTION)
 
+  const filter = role === 'admin' ? undefined : { _id: { $in: ids }};
+
   return await collection
-    .find()
+    .find(filter)
     .project({ _id: 1, name: 1, location: 1 })
     .map(({ _id, name, location }) => ({ _id, name, location }))
     .toArray()
