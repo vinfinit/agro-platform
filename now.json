@@ -1,5 +1,4 @@
 {
-  "name": "agro-platform",
   "version": 2,
   "env": {
     "API_URL": "@agro-api-url",
