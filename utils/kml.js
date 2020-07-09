@@ -17,8 +17,9 @@ const extractCoordinatesFromPolygon = (polygon) =>
 
 const parseKml = (kml) => {
   const parsedKml = convert.xml2js(kml, {compact: true});
+  const Placemark = parsedKml.kml.Document.Placemark || parsedKml.kml.Document.Folder.Placemark;
 
-  const parsedJson = parsedKml.kml.Document.Folder.Placemark.map(
+  const parsedJson = Placemark.map(
     (placemark, index) => {
       if (placemark.MultiGeometry) {
         return placemark.MultiGeometry.Polygon.map(extractCoordinatesFromPolygon)[0]
