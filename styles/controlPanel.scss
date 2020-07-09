@@ -1,7 +1,6 @@
 .controlPanel {
   flex-basis: 30%;
   overflow: auto;
-  padding: 0 5px;
 
   ul, ol {
     padding-inline-start: 30px;
@@ -30,3 +29,38 @@
   }
 }
 
+.controlPanelHidden {
+  flex-basis: 0;
+  padding: 0;
+}
+
+.content {
+  padding: 0 5px;
+}
+
+.hiddenTrigger {
+  position: absolute;
+  margin-left: -26px;
+  font-size: 30pt;
+  top: 45%;
+  cursor: pointer;
+  height: 23px;
+  width: 30px;
+  line-height: 34px;
+  border: 0;
+  text-align: center;
+  background-color: #ffed46;
+  opacity: 0.6;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.hiddenTriggerLeft {
+  transform: rotate(-90deg);
+}
+
+.hiddenTriggerRight {
+  transform: rotate(90deg);
+}
