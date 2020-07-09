@@ -36,6 +36,8 @@ const cos = (degrees) => {
 
 const Point = (x, y) => new google.maps.LatLng(x, y);
 
+const isSamePoints = (A, B) => A.lat() === B.lat() && A.lng() === B.lng();
+
 module.exports = {
   round,
   computeArea,
@@ -46,4 +48,5 @@ module.exports = {
   tangent,
   cos,
   Point,
+  isSamePoints,
 }

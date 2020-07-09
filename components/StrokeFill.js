@@ -1,7 +1,7 @@
 import { Component, Fragment } from 'react'
 import { Polyline, Rectangle } from '@react-google-maps/api'
 import { polygon as turfPolygon, lineString, lineIntersect } from '@turf/turf'
-import { cos, tangent, arcTangent, computeLength, Point } from '../utils/geometry'
+import { cos, tangent, arcTangent, computeLength, Point, isSamePoints } from '../utils/geometry'
 
 const ANGLE_WINDOW = 5;
 
@@ -22,6 +22,9 @@ class StrokeFill extends Component {
       const [pointA, pointB] = [ 
         path[i], i+1 !== path.length ? path[i+1] : path[0] 
       ];
+      if (isSamePoints(pointA, pointB)) {
+        continue;
+      }
       const k = (pointA.lat() - pointB.lat()) / (pointA.lng() - pointB.lng());
       segments.push({
         segment: [pointA, pointB],

@@ -1,6 +1,7 @@
-const url = require('url')
-import { MongoClient } from 'mongodb'
+import url from 'url'
+import mongodb from 'mongodb'
 
+const { MongoClient } = mongodb;
 const { MONGODB_URI } = process.env
 
 let cachedDb = null
@@ -18,4 +19,4 @@ const connectToDatabase = async () => {
   return db
 }
 
-module.exports = connectToDatabase;
+export default connectToDatabase;

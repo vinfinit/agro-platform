@@ -1,5 +1,7 @@
-import { ObjectID } from 'mongodb'
+import mongodb from 'mongodb'
 import connectToDatabase from '../connect'
+
+const { ObjectID } = mongodb;
 
 const CLUSTERS_COLLECTION = 'clusters'
 
@@ -32,7 +34,7 @@ const findAll = async (ids = [], role = '') => {
     .toArray()
 }
 
-module.exports = {
+export {
   findById,
   insertFields,
   findAll,
