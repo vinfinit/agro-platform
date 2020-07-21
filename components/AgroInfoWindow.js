@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { InfoWindow } from '@react-google-maps/api'
 
 import { round } from '../utils/geometry'
-import styles from '../styles/main.scss'
+import styles from '../styles/AgroInfoWindow.module.scss'
 
 const numberMask = (handler) => 
   (e) => {

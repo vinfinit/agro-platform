@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import MathJax from 'react-mathjax2'
 import { Menu } from 'semantic-ui-react'
-import styles from '../styles/controlPanel.scss'
+import styles from '../styles/ControlPanel.module.scss'
 import nExample from '../images/nExample.png'
 
 const STATES = {
@@ -9,8 +9,6 @@ const STATES = {
   LEGEND: 'Легенда',
   ALGORITHMS: 'Алгоритмы',
 }
-
-const hidden = 'hidden';
 
 const ControlPanel = () => {
   const [curState, setState] = useState(STATES.INTRODUCTION)
@@ -25,7 +23,7 @@ const ControlPanel = () => {
           ^
       </span>
 
-      <section className={`${styles.content} ${isHidden ? hidden : ''}`}>
+      <section className={`${styles.content} ${isHidden ? styles.hiddenItem : ''}`}>
         <Menu>
           {Object.entries(STATES).map(([state, stateName], index) => (
             <Menu.Item
@@ -39,11 +37,11 @@ const ControlPanel = () => {
           ))}
         </Menu>
 
-        <section className={curState === STATES.INTRODUCTION ? '' : hidden}>
+        <section className={curState === STATES.INTRODUCTION ? '' : styles.hiddenItem}>
           <p>Добро пожаловать на платформу для помощи сельскому хозяйству, которая поможет Вам убрать поле в кратчайшие сроки и покажет наиболее оптимальный маршрут для этого.</p>
         </section>
         
-        <section className={curState === STATES.LEGEND ? '' : hidden}>
+        <section className={curState === STATES.LEGEND ? '' : styles.hiddenItem}>
           <h3>Легенда</h3>
           <ul>
             <li><b>(S) Площадь</b> - площадь выделенного участка в <i>га</i></li>
@@ -56,7 +54,7 @@ const ControlPanel = () => {
           </ul>
         </section>
     
-        <section className={curState === STATES.ALGORITHMS ? '' : hidden}>
+        <section className={curState === STATES.ALGORITHMS ? '' : styles.hiddenItem}>
           <MathJax.Context input='ascii'>
             <section>
               <h3>Выбор оптимального направления для уборки комбайном</h3>

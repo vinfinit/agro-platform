@@ -11,7 +11,7 @@
       display: flex;
       border: 1px solid rgba(34,36,38,.15);
       text-align: center;
-
+  
       .item {
         flex: 1;
         padding: 13px 5px;
@@ -20,7 +20,7 @@
         &.active {
           background-color: #bbb;
         }
-
+  
         &:hover {
           background-color: #eee;
         }
@@ -63,4 +63,8 @@
 
 .hiddenTriggerRight {
   transform: rotate(90deg);
+}
+
+.hiddenItem {
+  display: none;
 }

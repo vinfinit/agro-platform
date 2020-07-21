@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import { MarkerClusterer, Marker } from '@react-google-maps/api';
 
 const FlaxCluster = (props) => {

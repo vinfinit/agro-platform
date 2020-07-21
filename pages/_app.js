@@ -9,6 +9,9 @@ import Layout from '../components/Layout'
 import Login from '../components/Login'
 import AgroMap from '../components/AgroMap'
 
+import 'bootstrap/dist/css/bootstrap.min.css'
+import '../styles/global.scss';
+
 const libraries = ['geometry', 'drawing'];
 
 const Index = () => {

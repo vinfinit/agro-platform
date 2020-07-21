@@ -1,0 +1,16 @@
+.infoWindow {
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 5px;
+}
+
+.infoWindowBody {
+  > div {
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+  }
+}
+
+.infoWindowDelete {
+  float: right;
+}

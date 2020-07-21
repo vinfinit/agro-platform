@@ -1,5 +1,5 @@
 import Header from './Header'
-import styles from '../styles/main.scss'
+import styles from '../styles/Layout.module.scss'
 
 const Layout = props => (
   <div>

@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import Select from 'react-select'
-import styles from '../styles/main.scss'
+import styles from '../styles/Header.module.scss'
 
 class Header extends Component {
   constructor(props) {

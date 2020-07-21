@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
-import { Button, FormGroup, FormControl, FormLabel } from 'react-bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import '../styles/login.scss'
+import { Button, FormGroup, FormControl } from 'react-bootstrap'
+import styles from '../styles/Login.module.scss'
 
 export default function Login(props) {
   const [email, setEmail] = useState('');
@@ -17,8 +16,8 @@ export default function Login(props) {
   }
 
   return (
-    <div className="wrapper fadeInDown">
-      <div className="Login">
+    <div className={`${styles.wrapper} fadeInDown`}>
+      <div className={styles.login}>
         <form onSubmit={handleSubmit}>
           <FormGroup controlId="email" size="lg">
             <FormControl
