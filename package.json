@@ -2,7 +2,6 @@
   "name": "agro-platform",
   "version": "1.0.0",
   "description": "A smart agriculture platform",
-  "main": "index.js",
   "scripts": {
     "dev": "next",
     "build": "next build",
@@ -22,19 +21,27 @@
   "dependencies": {
     "@react-google-maps/api": "^1.9.7",
     "@turf/turf": "^5.1.6",
+    "bcrypt": "^5.0.0",
     "bootstrap": "^4.5.0",
+    "cookies": "^0.8.0",
+    "google-auth-library": "^6.0.5",
     "http-status-codes": "^1.4.0",
     "isomorphic-unfetch": "^3.0.0",
+    "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.5.9",
     "next": "^9.4.4",
     "next-images": "^1.4.0",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.1",
     "react-dom": "^16.13.1",
+    "react-google-login": "^5.1.21",
     "react-mathjax2": "0.0.2",
     "react-select": "^3.1.0",
     "sass": "^1.26.10",
     "semantic-ui-react": "^0.88.2",
     "xml-js": "^1.6.11"
+  },
+  "devDependencies": {
+    "@vercel/node": "^1.7.3"
   }
 }

@@ -1,3 +1,5 @@
 {
-  "GMAP_API_KEY": "AIzaSyBtSuEeH3immDnssiE1WXGHdVteo-gE3Kc"
+  "GMAP_API_KEY": "AIzaSyBtSuEeH3immDnssiE1WXGHdVteo-gE3Kc",
+  "GOOGLE_IDENTITY_CLIENT_ID": "420064079366-5jn79pke7sd5j6dn36oqc886sukvbi93.apps.googleusercontent.com",
+  "DEMO_CLUSTER": "5f18478e3bdb2be599f98210"
 }

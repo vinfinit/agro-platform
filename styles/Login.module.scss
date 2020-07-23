@@ -1,10 +1,10 @@
 .login {
   @media all and (min-width: 480px) {
-    padding: 60px 0;
+    padding: 30px 0;
     width: 90%;
     max-width: 450px;
-    -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
-    box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
+    -webkit-box-shadow: 0 10px 20px 0 rgba(0,0,0,0.1);
+    box-shadow: 0 10px 20px 0 rgba(0,0,0,0.1);
   
     form {
       margin: 0 auto;
@@ -25,7 +25,7 @@
     font-size: 13px;
     -webkit-border-radius: 5px 5px 5px 5px;
     border-radius: 5px 5px 5px 5px;
-    margin: 5px 10px 40px 10px;
+    margin: 5px 10px 10px 10px;
   }
   
   button[type=submit] {
@@ -53,4 +53,17 @@
   width: 100%;
   min-height: 100%;
   padding: 20px;
+}
+
+.formGroup {
+  margin-bottom: 0rem;
+}
+
+.socialNetwork {
+  display: flex;
+  justify-content: center;
+}
+
+.separator {
+  margin: 20px 0;
 }

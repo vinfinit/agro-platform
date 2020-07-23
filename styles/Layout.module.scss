@@ -4,3 +4,17 @@
   width: 100%;
   height: 100%;
 }
+
+.spinnerContainer {
+  position: absolute;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  backdrop-filter: blur(3px);
+}
+
+.spinnerItem {
+  margin: auto;
+  width: 6rem;
+  height: 6rem;
+}

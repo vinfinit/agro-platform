@@ -4,4 +4,5 @@ module.exports = {
   HARVESTER_SIZE: 2.4,
   WORKING_SPEED: 4.2,
   TURN_SPEED: 2.8,
+  AGROPLATFORM_JWT: 'agroplatform_jwt'
 }

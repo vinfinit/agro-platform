@@ -1,7 +1,5 @@
-import mongodb from 'mongodb'
+import { ObjectID } from 'mongodb'
 import connectToDatabase from '../connect'
-
-const { ObjectID } = mongodb;
 
 const CLUSTERS_COLLECTION = 'clusters'
 
@@ -13,7 +11,7 @@ const insertFields = async ({ id, fields = [] }) => {
   return await collection.updateOne(filter, { $set: { fields } })
 }
 
-const findById = async id => {
+const findById = async (id: string) => {
   const db = await connectToDatabase()
   const collection = await db.collection(CLUSTERS_COLLECTION)
 
@@ -21,11 +19,11 @@ const findById = async id => {
   return await collection.findOne(filter)
 }
 
-const findAll = async (ids = [], role = '') => {
+const findAll = async (ids: string[] = [], role = '') => {
   const db = await connectToDatabase()
   const collection = await db.collection(CLUSTERS_COLLECTION)
 
-  const filter = role === 'admin' ? undefined : { _id: { $in: ids }};
+  const filter = role === 'admin' ? undefined : { _id: { $in: ids.map(id => ObjectID(id)) }};
 
   return await collection
     .find(filter)
