@@ -17,6 +17,7 @@ class AgroMap extends Component {
         lng: 27.592
       },
       fields: [],
+      circles: [],
     };
 
     this.loadFields(this.props.cluster._id)
@@ -31,8 +32,11 @@ class AgroMap extends Component {
 
   loadFields = async (clusterId) => {
     const res = await fetch(`${API_URL}/api/cluster/${clusterId}`);
-    const { fields } = await res.json();
-    this.setState({ fields: fields || [] })
+    const { fields, circles } = await res.json();
+    this.setState({ 
+      fields: fields || [],
+      circles: circles || [],
+    })
   }
 
   saveField = async (field) => {
@@ -94,6 +98,7 @@ class AgroMap extends Component {
           />
           <AgroDrawingManager 
             polygons={this.state.fields}
+            circles={this.state.circles}
             savePolygon={this.saveField}
             deletePolygon={this.deleteField}
           />

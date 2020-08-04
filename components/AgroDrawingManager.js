@@ -1,9 +1,9 @@
 import { Fragment, Component } from 'react'
-import { DrawingManager, Polygon, GoogleMap } from '@react-google-maps/api'
+import { DrawingManager, Polygon, Circle, Marker } from '@react-google-maps/api'
 import StrokeFill from './StrokeFill'
 import AgroInfoWindow from './AgroInfoWindow'
 
-import { round, computeArea, getCenter, getBounds } from '../utils/geometry'
+import { round, computeArea, getCenter, getBounds, Point } from '../utils/geometry'
 import { 
   HARVESTER_SIZE, 
   WORKING_SPEED, 
@@ -139,6 +139,12 @@ class AgroDrawingManager extends Component {
     const savedPolygons = this.props
       .polygons.map(paths => new google.maps.Polygon({ paths }));
 
+    const circles = this.props.circles.map(({ center, area }) => ({
+      center: Point(center.lat, center.lng),
+      radius: Math.sqrt(area * 10000 / Math.PI),
+      area: `${area}`
+    }));
+
     return (
       <Fragment>
         <DrawingManager
@@ -160,6 +166,19 @@ class AgroDrawingManager extends Component {
             options={drawingOptions.polygonOptions}
             onClick={this.openInfoWindow(polygon, i)}
           />
+        ))}
+        {circles.map((circle, i) => (
+          <Fragment key={i}>
+            <Circle
+              center={circle.center}
+              radius={circle.radius}
+              options={drawingOptions.polygonOptions}
+            />
+            <Marker
+              position={circle.center}
+              label={circle.area}
+            />
+          </Fragment>
         ))}
         {this.state.curPolygon && 
           <AgroInfoWindow 

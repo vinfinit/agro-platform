@@ -1,4 +1,4 @@
-import url from 'url'
+import * as url from 'url'
 import { MongoClient } from 'mongodb'
 
 const { MONGODB_URI } = process.env

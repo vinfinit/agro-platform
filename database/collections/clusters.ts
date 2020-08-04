@@ -11,6 +11,14 @@ const insertFields = async ({ id, fields = [] }) => {
   return await collection.updateOne(filter, { $set: { fields } })
 }
 
+const insertCircles = async ({ id, circles = [] }) => {
+  const db = await connectToDatabase()
+  const collection = await db.collection(CLUSTERS_COLLECTION)
+
+  const filter = id ? {_id: ObjectID(id)} : {}
+  return await collection.updateOne(filter, { $set: { circles } })
+}
+
 const findById = async (id: string) => {
   const db = await connectToDatabase()
   const collection = await db.collection(CLUSTERS_COLLECTION)
@@ -35,5 +43,6 @@ const findAll = async (ids: string[] = [], role = '') => {
 export {
   findById,
   insertFields,
+  insertCircles,
   findAll,
 };
