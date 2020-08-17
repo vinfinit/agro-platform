@@ -2,10 +2,11 @@ import { InfoWindow } from '@react-google-maps/api'
 
 import InfoWindowHeader from './InfoWindowHeader'
 import InfoWindowBodyPolygon from './InfoWindowBodyPolygon'
-import styles from '../../styles/AgroInfoWindow.module.scss'
-import InfoWindowBodyMarker from './InfoWindowBodyMarker';
+import InfoWindowBodyMarker from './InfoWindowBodyMarker'
 
-const AgroInfoWindow = (props) => (
+import styles from '../../styles/AgroInfoWindow.module.scss'
+
+export const AgroInfoWindow = (props) => (
   <InfoWindow 
     position={props.polygon.position}
     onCloseClick={props.onClose}
@@ -16,26 +17,18 @@ const AgroInfoWindow = (props) => (
         onSave={props.onSave}
         onDelete={props.onDelete}
       />
-      {props.polygon
-       ? <InfoWindowBodyPolygon
-        polygon={props.polygon}
-        totalDistance={props.totalDistance}
-        workingSpeed={props.workingSpeed}
-        onWorkingSpeedChange={props.onWorkingSpeedChange}
-        nLines={props.nLines}
-        singleTurnDistance={props.singleTurnDistance}
-        turnSpeed={props.turnSpeed}
-        onTurnSpeedChange={props.onTurnSpeedChange}
-        harvesterSize={props.harvesterSize}
-        onHarvesterSizeChange={props.onHarvesterSizeChange}
-      />
-      : <InfoWindowBodyMarker
-        area={props.area}
-        onAreaChange={props.onAreaChange}
-      />
+      {props.children}
+      {props.mode === 'circle' &&
+        <InfoWindowBodyMarker
+          area={props.area}
+          onAreaChange={props.onAreaChange}
+        />
       }
     </section>
   </InfoWindow>
 );
 
-export default AgroInfoWindow
+export {
+  InfoWindowBodyPolygon,
+  InfoWindowBodyMarker,
+};

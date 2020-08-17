@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { round } from '../../utils/geometry'
 import styles from '../../styles/AgroInfoWindow.module.scss'
 
-const numberMask = (handler) => 
+const numericMask = (handler) => 
   (e) => {
     const re = /^[0-9.]+$/;
     if (e.target.value === '' || re.test(e.target.value)) {
@@ -27,7 +27,7 @@ const InfoWindowBodyPolygon = (props) => {
       <div>Ширина захвата: 
         <input 
           value={props.harvesterSize}
-          onChange={props.onHarvesterSizeChange}
+          onChange={numericMask(props.onHarvesterSizeChange)}
         />
         m
       </div>
@@ -37,7 +37,7 @@ const InfoWindowBodyPolygon = (props) => {
       <div>Рабочая скорость: 
         <input 
           value={props.workingSpeed}
-          onChange={props.onWorkingSpeedChange}
+          onChange={numericMask(props.onWorkingSpeedChange)}
         />
         km/h
       </div>
@@ -46,7 +46,7 @@ const InfoWindowBodyPolygon = (props) => {
       <div>Скорость на поворотах:
         <input 
           value={props.turnSpeed}
-          onChange={props.onTurnSpeedChange}
+          onChange={numericMask(props.onTurnSpeedChange)}
         />
         km/h
       </div>
@@ -54,14 +54,14 @@ const InfoWindowBodyPolygon = (props) => {
       <div>Доп. расстояние на препятствия:
         <input 
           value={obstaclesDistance}
-          onChange={numberMask(setObstaclesDistance)}
+          onChange={numericMask(setObstaclesDistance)}
         />
         м
       </div>
       <div>Доп. время на препятствия:
         <input 
           value={obstaclesTime}
-          onChange={numberMask(setObstaclesTime)}
+          onChange={numericMask(setObstaclesTime)}
         />
         мин
       </div>

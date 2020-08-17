@@ -1,7 +1,7 @@
 import { Component, Fragment } from 'react'
-import { Polyline, Rectangle } from '@react-google-maps/api'
+import { Polyline } from '@react-google-maps/api'
 import { polygon as turfPolygon, lineString, lineIntersect } from '@turf/turf'
-import { cos, tangent, arcTangent, computeLength, Point, isSamePoints } from '../utils/geometry'
+import { cos, tangent, arcTangent, computeLength, Point, isSamePoints } from '../../utils/geometry'
 
 const ANGLE_WINDOW = 5;
 
