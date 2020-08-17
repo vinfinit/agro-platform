@@ -1,3 +1,4 @@
+import { numericMask } from '../../utils/masks'
 import styles from '../../styles/AgroInfoWindow.module.scss'
 
 const InfoWindowBodyMarker = (props) => (
@@ -5,9 +6,9 @@ const InfoWindowBodyMarker = (props) => (
     <div>Площадь: 
       <input 
         value={props.area}
-        onAreaChange={props.onAreaChange}
+        onChange={numericMask(props.onAreaChange)}
       />
-      m
+      га
     </div>
   </section>
 );

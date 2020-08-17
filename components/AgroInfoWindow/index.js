@@ -18,12 +18,6 @@ export const AgroInfoWindow = (props) => (
         onDelete={props.onDelete}
       />
       {props.children}
-      {props.mode === 'circle' &&
-        <InfoWindowBodyMarker
-          area={props.area}
-          onAreaChange={props.onAreaChange}
-        />
-      }
     </section>
   </InfoWindow>
 );

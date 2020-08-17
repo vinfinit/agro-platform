@@ -17,7 +17,7 @@ class AgroMap extends Component {
         lng: 27.592
       },
       fields: [],
-      circles: [],
+      markers: [],
     };
 
     this.loadFields(this.props.cluster._id)
@@ -30,12 +30,20 @@ class AgroMap extends Component {
     }
   }
 
+  uploadMarkers = async (markers) => {
+    const clusterId = this.props.cluster._id;
+    await fetch(`/api/cluster/${clusterId}`, {
+      method: 'POST',
+      body: JSON.stringify({ markers }),
+    });
+  }
+
   loadFields = async (clusterId) => {
     const res = await fetch(`${API_URL}/api/cluster/${clusterId}`);
-    const { fields, circles } = await res.json();
+    const { fields, markers } = await res.json();
     this.setState({ 
       fields: fields || [],
-      circles: circles || [],
+      markers: markers || [],
     })
   }
 
@@ -98,9 +106,10 @@ class AgroMap extends Component {
           />
           <AgroDrawingManager 
             polygons={this.state.fields}
-            circles={this.state.circles}
+            markers={this.state.markers}
             savePolygon={this.saveField}
             deletePolygon={this.deleteField}
+            uploadMarkers={this.uploadMarkers}
           />
         </GoogleMap>
         <ControlPanel />

@@ -36,6 +36,8 @@ const cos = (degrees) => {
 
 const Point = (x, y) => new google.maps.LatLng(x, y);
 
+const Size = (width, height) => new google.maps.Size(width, height);
+
 const isSamePoints = (A, B) => A.lat() === B.lat() && A.lng() === B.lng();
 
 module.exports = {
@@ -49,4 +51,5 @@ module.exports = {
   cos,
   Point,
   isSamePoints,
+  Size,
 }

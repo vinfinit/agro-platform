@@ -3,12 +3,12 @@ import connectToDatabase from '../connect'
 
 const CLUSTERS_COLLECTION = 'clusters'
 
-const insertFields = async ({ id, fields = [] }) => {
+const insertFields = async ({ id, fields = [], markers = [] }) => {
   const db = await connectToDatabase()
   const collection = await db.collection(CLUSTERS_COLLECTION)
 
   const filter = id ? {_id: ObjectID(id)} : {}
-  return await collection.updateOne(filter, { $set: { fields } })
+  return await collection.updateOne(filter, { $set: { fields, markers } })
 }
 
 const insertCircles = async ({ id, circles = [] }) => {
