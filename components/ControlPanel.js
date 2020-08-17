@@ -12,7 +12,7 @@ const STATES = {
 
 const ControlPanel = () => {
   const [curState, setState] = useState(STATES.INTRODUCTION)
-  const [isHidden, setHidden] = useState(false)
+  const [isHidden, setHidden] = useState(true)
 
   return (
     <div className={`${styles.controlPanel} ${isHidden ? styles.controlPanelHidden : ''}`}>
