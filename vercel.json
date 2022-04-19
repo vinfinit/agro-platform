@@ -1,8 +1,0 @@
-{
-  "version": 2,
-  "env": {
-    "API_URL": "@agro-api-url",
-    "MONGODB_URI": "@agro-mongodb-uri",
-    "JWT_PRIVATE_KEY": "@jwt-private-key"
-  }
-}

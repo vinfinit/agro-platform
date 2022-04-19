@@ -1,4 +1,4 @@
-import { NowRequest, NowResponse } from '@vercel/node'
+import { VercelRequest, VercelResponse } from '@vercel/node'
 import { UNAUTHORIZED, OK } from 'http-status-codes'
 import Cookies from 'cookies'
 import bcrypt from 'bcrypt'
@@ -20,7 +20,7 @@ const generateJwt = (user: UserEntity): string => {
   return token;
 };
 
-const googleProvider = async (req: NowRequest): Promise<UserEntity> => {
+const googleProvider = async (req: VercelRequest): Promise<UserEntity> => {
   const auth = req.headers.authorization;
   const token = auth?.split('Bearer ')[1];
   if (!auth || !token) {
@@ -48,7 +48,7 @@ const googleProvider = async (req: NowRequest): Promise<UserEntity> => {
   };
 };
 
-const localProvider = async (req: NowRequest): Promise<UserEntity> => {
+const localProvider = async (req: VercelRequest): Promise<UserEntity> => {
   const auth = req.headers.authorization;
   const token = auth?.split('Basic ')[1];
   if (!auth || !token) {
@@ -71,7 +71,7 @@ const localProvider = async (req: NowRequest): Promise<UserEntity> => {
   return null;
 };
 
-export default async (req: NowRequest, res: NowResponse) => {
+const login = async (req: VercelRequest, res: VercelResponse) => {
   let user: UserEntity;
   if (req.query.provider === 'google') {
     user = await googleProvider(req);
@@ -89,3 +89,5 @@ export default async (req: NowRequest, res: NowResponse) => {
   
   res.status(OK).send('Token obtained');
 };
+
+export default login;

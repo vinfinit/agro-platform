@@ -1,4 +1,4 @@
-import { NowRequest } from '@vercel/node'
+import { VercelRequest } from '@vercel/node'
 
 export declare type UserEntity = {
   email: string;
@@ -6,6 +6,6 @@ export declare type UserEntity = {
   role?: string;
 }
 
-export declare type ExtendedNowRequest = NowRequest & {
+export declare type ExtendedVercelRequest = VercelRequest & {
   user: UserEntity;
 };
