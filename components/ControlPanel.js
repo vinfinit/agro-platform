@@ -1,8 +1,8 @@
+import Image from 'next/image'
 import { useState } from 'react'
 import MathJax from 'react-mathjax2'
 import { Menu } from 'semantic-ui-react'
 import styles from '../styles/ControlPanel.module.scss'
-import nExample from '../images/nExample.png'
 
 const STATES = {
   INTRODUCTION: 'Введение',
@@ -101,7 +101,7 @@ const ControlPanel = () => {
                 </li>
               </ol>
               <h4>Пример:</h4>
-              <img src={nExample}></img>
+              <Image src={require('../images/nExample.png')} alt="example" />
               <ol start='0'>
                 <li><MathJax.Node>GH</MathJax.Node> - направление уборки</li>
                 <li><MathJax.Node>g</MathJax.Node> - перпендикуляр к GH</li>

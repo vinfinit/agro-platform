@@ -4,6 +4,7 @@
   "description": "A smart agriculture platform",
   "scripts": {
     "dev": "next",
+    "lint": "next lint",
     "build": "next build",
     "start": "next start"
   },
@@ -30,7 +31,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.5.9",
     "next": "^12.1.5",
-    "next-images": "^1.4.0",
+    "next-images": "^1.8.4",
     "react": "^16.13.1",
     "react-beforeunload": "^2.2.2",
     "react-bootstrap": "^1.0.1",
@@ -45,6 +46,8 @@
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
-    "@vercel/node": "^1.7.3"
+    "@vercel/node": "^1.7.3",
+    "eslint": "8.13.0",
+    "eslint-config-next": "12.1.5"
   }
 }
