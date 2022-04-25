@@ -1,7 +1,12 @@
 const Index = () => {};
 
 export const getServerSideProps = async (ctx) => {
-  ctx.res.writeHead(302, { Location: '/dashboard' }).end()
+  return {
+    redirect: {
+      permanent: false,
+      destination: '/dashboard',
+    }
+  }
 };
 
 export default Index;

@@ -162,11 +162,13 @@ class StrokeFill extends Component {
   }
 
   render() {
-    const rectWrapper = this.wrapPolygonIntoRectangle(this.props.polygon);
-    const polygonSegments = this.splitPolygonIntoSegments(this.props.polygon);
+    const googlePolygon = new google.maps.Polygon({ paths: this.props.polygon });
+
+    const rectWrapper = this.wrapPolygonIntoRectangle(googlePolygon);
+    const polygonSegments = this.splitPolygonIntoSegments(googlePolygon);
     const { k } = this.findBiggestSegmentCluster(polygonSegments);
     const directionSegments = this.generateDirectionSegments(rectWrapper, k);
-    const intersectSegments = this.computeIntersectSegments(directionSegments, this.props.polygon);
+    const intersectSegments = this.computeIntersectSegments(directionSegments, googlePolygon);
 
     const n = this.getNormal(k);
     const [projectionLen, originLen] = this.projectPolygonToNormal(polygonSegments, n, k);

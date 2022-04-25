@@ -12,14 +12,17 @@ const computeLength = (pointA, pointB) =>
 
 const getCenter = (polygon) => {
   let bounds = new google.maps.LatLngBounds();
-  polygon.getPath().forEach(path => {
+  polygon.getPath().getArray().forEach(path => {
     bounds.extend(path)
   });
   return bounds.getCenter()
 }
 
 const getBounds = (polygon) => {
-  return polygon.getPath().getArray()
+  return polygon.getPath().getArray().map(p => ({
+    lat: p.lat(),
+    lng: p.lng(),
+  }))
 }
 
 const arcTangent = (k) => {

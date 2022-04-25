@@ -1,121 +1,93 @@
-import { Fragment, Component } from 'react'
-import { GoogleMap } from '@react-google-maps/api'
+import { Fragment, useEffect, useState, useCallback } from 'react'
+import { GoogleMap, useLoadScript } from '@react-google-maps/api'
 
 import AgroDrawingManager from './AgroDrawingManager'
 import ControlPanel from './ControlPanel'
 import FlaxCluster from './FlaxCluster'
 
 import { API_URL } from '../utils/constants'
+import config from '../config'
 
-class AgroMap extends Component {
-  constructor(props) {
-    super(props);
+const libraries = ['geometry', 'drawing'];
 
-    this.state = {
-      center: {
-        lat: 53.768,
-        lng: 27.592
-      },
-      fields: [],
-      markers: [],
-    };
+const AgroMap = (props) => {
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: config.GMAP_API_KEY,
+    libraries,
+  });
 
-    this.loadFields(this.props.cluster._id)
-  }
+  const [map, setMap] = useState(null);
 
-  async componentDidUpdate(prevProps, prevState) {
-    const curClusterId = this.props.cluster._id;
-    if (curClusterId  !== prevProps.cluster._id) {
-      this.loadFields(curClusterId)
+  const onLoad = useCallback(function callback(map) {
+    setMap(map);
+  }, []);
+
+  const onUnmount = useCallback(function callback(map) {
+    setMap(null)
+  }, []);
+
+  const [activeCluster, setActiveCluster] = useState(props.cluster._id);
+  const [center, setCenter] = useState(props.cluster.location || {
+    lat: 53.768,
+    lng: 27.592
+  });
+  const [fields, setFields] = useState([]);
+  const [markers, setMarkers] = useState([]);
+
+  useEffect(() => {
+    if (props.cluster._id !== activeCluster) {
+      loadCluster(props.cluster._id);
+      setActiveCluster(props.cluster._id);
+      setCenter(props.cluster.location);
     }
-  }
+  }, [props.cluster._id, activeCluster, props.cluster.location]);
 
-  uploadMarkers = async (markers) => {
-    const clusterId = this.props.cluster._id;
-    await fetch(`/api/cluster/${clusterId}`, {
-      method: 'POST',
-      body: JSON.stringify({ markers }),
-    });
-  }
-
-  loadFields = async (clusterId) => {
+  const loadCluster = async (clusterId) => {
     const res = await fetch(`${API_URL}/api/cluster/${clusterId}`);
     const { fields, markers } = await res.json();
-    this.setState({ 
-      fields: fields || [],
-      markers: markers || [],
-    })
+    
+    setFields(fields || []);
+    setMarkers(markers || []);
   }
 
-  saveField = async (field) => {
-    const clusterId = this.props.cluster._id;
-    const fields = [
-      ...this.state.fields, field,
-    ];
-
-    await fetch(`/api/cluster/${clusterId}`, {
+  const updateCluster = async (markers, fields) => {
+    await fetch(`/api/cluster/${activeCluster}`, {
       method: 'POST',
-      body: JSON.stringify({ fields }),
+      body: JSON.stringify({ markers, fields }),
     });
 
-    this.setState({ fields: [...fields, field] })
+    setFields(fields);
+    setMarkers(markers);
   }
 
-  deleteField = async (field) => {
-    const clusterId = this.props.cluster._id;
-    const fieldIndex = this.state.fields.findIndex(savedField => {
-      if (JSON.stringify(savedField) === JSON.stringify(field)) {
-        return savedField
-      }
-    });
-    const fields = [...this.state.fields];
-    fields.splice(fieldIndex, 1);
-
-    await fetch(`/api/cluster/${clusterId}`, {
-      method: 'POST',
-      body: JSON.stringify({ fields }),
-    });
-
-    this.setState({ fields })
-  }
-
-  nodeOnClick = (node) => {
-    // console.log(this.state)
-    // const { cursor } = this.state;
-    // if (node.children) {
-    //   node.toggled = toggled;
-    // }
-    // this.setState(() => ({ cursor: node, clusters: [...clusters] }));
-  }
-
-  render() {
-    return (
-      <Fragment>
+  return (
+    <Fragment>
+      {isLoaded && (
         <GoogleMap
           id="agro-platform-map"
           mapContainerStyle={{
             height: "100%",
             width: "100%"
           }}
+          center={center}
           zoom={6}
-          center={this.state.center}
+          onLoad={onLoad}
+          onUnmount={onUnmount}
         >
           <FlaxCluster 
-            cluster={this.props.cluster} 
-            nodeOnClick={this.nodeOnClick} 
+            cluster={props.cluster} 
+            nodeOnClick={() => {}} 
           />
           <AgroDrawingManager 
-            polygons={this.state.fields}
-            markers={this.state.markers}
-            savePolygon={this.saveField}
-            deletePolygon={this.deleteField}
-            uploadMarkers={this.uploadMarkers}
+            polygons={fields}
+            markers={markers}
+            updateCluster={updateCluster}
           />
         </GoogleMap>
-        <ControlPanel />
-      </Fragment>
-    )
-  }
+      )}
+      <ControlPanel />
+    </Fragment>
+  )
 }
 
 export default AgroMap

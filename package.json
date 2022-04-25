@@ -6,7 +6,8 @@
     "dev": "next",
     "lint": "next lint",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "kml-to-json": "ts-node ./local/kmlToJson.ts"
   },
   "repository": {
     "type": "git",
@@ -20,7 +21,7 @@
   },
   "homepage": "https://github.com/vinfinit/agro-platform#readme",
   "dependencies": {
-    "@react-google-maps/api": "^1.9.7",
+    "@react-google-maps/api": "^2.8.1",
     "@turf/turf": "^5.1.6",
     "bcrypt": "^5.0.0",
     "bootstrap": "^4.5.0",
@@ -46,8 +47,13 @@
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
+    "@types/node": "^17.0.26",
     "@vercel/node": "^1.7.3",
+    "dotenv": "^16.0.0",
     "eslint": "8.13.0",
-    "eslint-config-next": "12.1.5"
+    "eslint-config-next": "12.1.5",
+    "ts-node": "^10.7.0",
+    "tslib": "^2.4.0",
+    "typescript": "^4.6.3"
   }
 }

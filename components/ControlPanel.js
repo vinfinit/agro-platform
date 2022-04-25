@@ -39,6 +39,14 @@ const ControlPanel = () => {
 
         <section className={curState === STATES.INTRODUCTION ? '' : styles.hiddenItem}>
           <p>Добро пожаловать на платформу для помощи сельскому хозяйству, которая поможет Вам убрать поле в кратчайшие сроки и покажет наиболее оптимальный маршрут для этого.</p>
+          <h3>Как использовать</h3>
+          <ul>
+            <li>Выберите кластер в левом верхнем углу экрана</li>
+            <li>Создайте новый или измените существующую конфигурация поля или маркера</li>
+            <li>Чтобы изменить текущий элемент, выберите "руку" и нажмите один раз на эелемент</li>
+            <li>Чтобы удалить текущий элемент, выберите "руку" и двойной клик на эелементе</li>
+            <li>Чтобы сохранить Ваши изменения, нажмите комбинацию клавиш ctrl+k (появится индикатор сохранения на экране)</li>
+          </ul>
         </section>
         
         <section className={curState === STATES.LEGEND ? '' : styles.hiddenItem}>
@@ -101,7 +109,7 @@ const ControlPanel = () => {
                 </li>
               </ol>
               <h4>Пример:</h4>
-              <Image src={require('../images/nExample.png')} alt="example" />
+              <Image src={require('../images/nExample.png')} height={200} width={200} alt="example" />
               <ol start='0'>
                 <li><MathJax.Node>GH</MathJax.Node> - направление уборки</li>
                 <li><MathJax.Node>g</MathJax.Node> - перпендикуляр к GH</li>

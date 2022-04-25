@@ -43,60 +43,31 @@ const CanvasManagerPolygon = (props) => {
         setNLines(projectSegments.projectionLen / 2 / harvesterSize);
       }
     }
-  }, [activePolygon]);
+  }, [activePolygon, harvesterSize, projectSegments]);
 
-  const onPolygonClick = (polygon, index, isSaved = false) => () => {
+  const onPolygonClick = (polygon, index) => {
+    const googlePolygon = new google.maps.Polygon({ paths: polygon });
     setActivePolygon({
       polygon,
-      isSaved,
       index,
-      position: getCenter(polygon),
-      area: computeArea(polygon),
-      bounds: getBounds(polygon),
+      position: getCenter(googlePolygon),
+      area: computeArea(googlePolygon),
+      bounds: getBounds(googlePolygon),
     });
     console.log('set active polygon');
   }
-
-  const savePolygon = async () => {
-    const polygon = activePolygon.bounds.map(p => ({
-      lat: p.lat(),
-      lng: p.lng(),
-    }));
-
-    setActivePolygon(null);
-    await props.savePolygon(polygon)
-  }
-
-  const deletePolygon = async () => {
-    const polygon = activePolygon.bounds.map(p => ({
-      lat: p.lat(),
-      lng: p.lng(),
-    }));
-
-    setActivePolygon(null);
-    await props.deletePolygon(polygon)
-  }
-
-  const savedPolygons = props.savedPolygons.map((paths) => new google.maps.Polygon({ paths }));
     
   return (
     <Fragment>
-      {savedPolygons.map((polygon, i) => {
+      {props.polygons.map((polygon, i) => 
         <Polygon 
           key={i}
-          path={polygon.getPath()}
+          path={polygon}
           options={drawingOptions.savedPolygonOptions}
-          onClick={onPolygonClick(polygon, i, true)}
+          onClick={() => onPolygonClick(polygon, i, true)}
+          onRightClick={() => props.onPolygonChange(null, i)}
         />
-      })}
-      {props.newPolygons.map((polygon, i) => (
-        <Polygon 
-          key={i}
-          path={polygon.getPath()}
-          options={drawingOptions.polygonOptions}
-          onClick={onPolygonClick(polygon, i)}
-        />
-      ))}
+      )}
       {activePolygon && 
         <StrokeFill 
           key={activePolygon.index}
@@ -109,8 +80,6 @@ const CanvasManagerPolygon = (props) => {
       {activePolygon && 
         <AgroInfoWindow
           polygon={activePolygon}
-          onSave={savePolygon}
-          onDelete={deletePolygon}
           onClose={() => setActivePolygon(null)}
         >
           <InfoWindowBodyPolygon

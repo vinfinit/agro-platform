@@ -1,34 +1,24 @@
 import { useState, Fragment } from 'react'
-import { useLoadScript } from '@react-google-maps/api'
 import fetch from 'isomorphic-unfetch'
 
 import { API_URL } from '../utils/constants'
-import config from '../config'
 
 import Layout from '../components/Layout'
 import AgroMap from '../components/AgroMap'
 
-const libraries = ['geometry', 'drawing'];
-
 const Dashboard = ({ clusterList }) => {
   const [cluster, setCluster] = useState(clusterList[0]);
-  const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: config.GMAP_API_KEY,
-    libraries,
-  });
   
-  const renderMap = () => (
+  return (
     <Fragment>
       <Layout 
         clusterList={clusterList}
         setCluster={setCluster}
       >
-        {isLoaded && <AgroMap cluster={cluster} />}
+        <AgroMap cluster={cluster} />
       </Layout>
     </Fragment>
   )
-
-  return isLoaded ? renderMap() : null;
 };
 
 export const getServerSideProps = async (ctx) => {
@@ -47,10 +37,13 @@ export const getServerSideProps = async (ctx) => {
       }
     }
   } catch(err) {
-    ctx.res.writeHead(302, { Location: '/login' }).end();
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/login',
+      }
+    }
   }
-
-  return { props: { clusterList: [] } };
 };
 
 export default Dashboard;

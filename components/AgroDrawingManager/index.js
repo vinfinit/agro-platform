@@ -1,6 +1,5 @@
 import { Fragment, useState, useEffect } from 'react'
 import { DrawingManager } from '@react-google-maps/api'
-import { useBeforeunload } from 'react-beforeunload'
 import { useHotkeys } from 'react-hotkeys-hook'
 import CanvasManagerPolygon from './CanvasManagerPolygon'
 import CanvasManagerMarker from './CanvasManagerMarker'
@@ -13,18 +12,37 @@ const drawingOptions = {
 };
 
 const AgroDrawingManager = (props) => {
-  const [polygons, setPolygons] = useState([]);
+  const [polygons, setPolygons] = useState([...props.polygons]);
   const [markers, setMarkers] = useState([...props.markers]);
   const [isLoading, toggleLoading] = useState(false);
-  
+
   useEffect(() => {
-    setMarkers([...props.markers])
-  }, [props.markers]);
+    setPolygons(props.polygons);
+    setMarkers(props.markers);
+  }, [props.polygons, props.markers]);
 
   const onPolygonComplete = (polygon) => {
-    setPolygons([...polygons, polygon]);
+    const paths = polygon.getPath().getArray().map(p => ({
+      lat: p.lat(),
+      lng: p.lng(),
+    }));
+
+    setPolygons([...polygons, paths]);
     polygon.setMap(null);
   };
+
+  const onPolygonChange = (polygon, index) => {
+    const polygonsCopy = [...polygons];
+    if (polygon) {
+      polygonsCopy[index] = polygon.getPath().getArray().map(p => ({
+        lat: p.lat(),
+        lng: p.lng(),
+      }));
+    } else {
+      polygonsCopy.splice(index, 1);
+    }
+    setPolygons(polygonsCopy);
+  }
 
   const onMarkerComplete = (marker) => {
     const position = marker.getPosition();
@@ -51,7 +69,7 @@ const AgroDrawingManager = (props) => {
 
   useHotkeys('ctrl+k', async () => {
     toggleLoading(true);
-    await props.uploadMarkers(markers);
+    await props.updateCluster(markers, polygons);
     toggleLoading(false);
   }, [markers]);
 
@@ -63,10 +81,8 @@ const AgroDrawingManager = (props) => {
         options={drawingOptions}
       />
       <CanvasManagerPolygon
-        savedPolygons={props.polygons}
-        newPolygons={polygons}
-        savePolygon={props.savePolygon}
-        deletePolygon={props.deletePolygon}
+        polygons={polygons}
+        onPolygonChange={onPolygonChange}
       />
       <CanvasManagerMarker
         markers={markers}

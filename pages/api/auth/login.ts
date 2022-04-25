@@ -5,10 +5,10 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { OAuth2Client } from 'google-auth-library'
 
-import { findUser, createUser } from '../../database/collections/users'
-import { AGROPLATFORM_JWT } from '../../utils/constants'
-import { UserEntity } from '../../utils/types'
-import config from '../../config.json'
+import { findUser, createUser } from '../../../database/collections/users'
+import { AGROPLATFORM_JWT } from '../../../utils/constants'
+import { UserEntity } from '../../../utils/types'
+import config from '../../../config.json'
 
 
 const generateJwt = (user: UserEntity): string => {

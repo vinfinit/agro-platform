@@ -1,4 +1,4 @@
-import resetDb from '../../database/reset';
+import resetDb from '../../../database/reset';
 
 module.exports = async (req, res) => {
   const data = await resetDb();

@@ -1,10 +1,12 @@
-import fs from 'fs'
-import util from 'util'
+require('dotenv').config();
+
+import * as fs from 'fs'
+import * as util from 'util'
 import parseKml from '../utils/kml'
 import * as collection from '../database/collections/clusters'
 
-const id = '5f06f9a824b6b1f53773589b';
-const inputFile = `~/Downloads/2020.kml`;
+const id = '6265e885404968271d1801cd';
+const inputFile = `/Users/vpudding/Downloads/2021.kml`;
 
 const saveKmlToDb = async (id, inputFile) => {
   console.log(`Reading ${inputFile}`);
