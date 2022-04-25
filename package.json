@@ -7,7 +7,7 @@
     "lint": "next lint",
     "build": "next build",
     "start": "next start",
-    "kml-to-json": "ts-node ./local/kmlToJson.ts"
+    "kml-to-json": "ts-node --project tsconfig-local.json ./local/kmlToJson.ts"
   },
   "repository": {
     "type": "git",
