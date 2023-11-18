@@ -18,6 +18,7 @@ The difference between _config.json_ and _.env_ is _config.json_ can be exposed 
 
 Change the values to allow those service to be accessable from localhost. Current values are configured for agro-platfrom-prod.
 
+To Do:
 P.S. it would be better to generate _config.json_ from secrets in CI/CD pipeline. Maybe will do it in next release.
 
 ```json
