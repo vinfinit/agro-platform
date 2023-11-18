@@ -35,7 +35,6 @@ const CanvasManagerPolygon = (props) => {
   const [nLines, setNLines] = useState(0);
 
   useEffect(() => {
-    console.log('calculate metrics', activePolygon);
     if (activePolygon) {
       setTotalDistance(round(activePolygon.area / +harvesterSize));
       setSingleTurnDistance((+harvesterSize * 105) / 14 + 34);

@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { useState } from 'react'
 import MathJax from 'react-mathjax2'
-import { Menu } from 'semantic-ui-react'
+import { Button, Menu, MenuItem } from '@mui/material'
 import styles from '../styles/ControlPanel.module.scss'
 
 const STATES = {
@@ -11,8 +11,19 @@ const STATES = {
 }
 
 const ControlPanel = () => {
+  const [menuAnchorEl, setMenuAnchorEl] = useState(null)
+  const open = Boolean(menuAnchorEl)
+
   const [curState, setState] = useState(STATES.INTRODUCTION)
   const [isHidden, setHidden] = useState(true)
+
+  const openMenu = (event) => {
+    setMenuAnchorEl(event.currentTarget);
+  };
+
+  const closeMenu = () => {
+    setMenuAnchorEl(null);
+  };
 
   return (
     <div className={`${styles.controlPanel} ${isHidden ? styles.controlPanelHidden : ''}`}>
@@ -24,16 +35,22 @@ const ControlPanel = () => {
       </span>
 
       <section className={`${styles.content} ${isHidden ? styles.hiddenItem : ''}`}>
-        <Menu>
+        <Button onClick={openMenu}>
+          {curState}
+        </Button>
+        <Menu
+          open={open}
+          anchorEl={menuAnchorEl}
+          onClose={closeMenu}
+        >
           {Object.entries(STATES).map(([state, stateName], index) => (
-            <Menu.Item
+            <MenuItem
               key={index}
-              name={state}
-              active={curState === stateName}
+              selected={curState === stateName}
               onClick={() => setState(stateName)}
             >
               {stateName}
-            </Menu.Item>
+            </MenuItem>
           ))}
         </Menu>
 
@@ -62,7 +79,7 @@ const ControlPanel = () => {
           </ul>
         </section>
     
-        <section className={curState === STATES.ALGORITHMS ? '' : styles.hiddenItem}>
+        {/* <section className={curState === STATES.ALGORITHMS ? '' : styles.hiddenItem}>
           <MathJax.Context input='ascii'>
             <section>
               <h3>Выбор оптимального направления для уборки комбайном</h3>
@@ -136,7 +153,7 @@ const ControlPanel = () => {
               </MathJax.Node>
             </section>
           </MathJax.Context>
-        </section>
+        </section> */}
       </section>
     </div>
   )

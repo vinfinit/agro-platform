@@ -1,5 +1,5 @@
 import * as url from 'url'
-import { MongoClient } from 'mongodb'
+import { MongoClient, ServerApiVersion } from 'mongodb'
 
 const { MONGODB_URI } = process.env
 
@@ -10,11 +10,16 @@ const connectToDatabase = async (): Promise<any> => {
     return cachedDb
   }
 
-  const options: any = { useNewUrlParser: true, useUnifiedTopology: true }
-  const client = await MongoClient.connect(MONGODB_URI, options, null)
+  const client = new MongoClient(MONGODB_URI, {
+    serverApi: {
+      version: ServerApiVersion.v1,
+      strict: true,
+      deprecationErrors: true,
+    }
+  })
+  await client.connect()
 
-  const db = await client.db(url.parse(MONGODB_URI).pathname.substr(1))
-
+  const db = await client.db('agro-platform')
   cachedDb = db
   return db
 }

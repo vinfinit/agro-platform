@@ -4,6 +4,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import CanvasManagerPolygon from './CanvasManagerPolygon'
 import CanvasManagerMarker from './CanvasManagerMarker'
 import Loader from '../Loader'
+import { useEvents } from '../../utils/useEvents'
 
 const drawingOptions = {
   drawingControlOptions: {
@@ -12,14 +13,17 @@ const drawingOptions = {
 };
 
 const AgroDrawingManager = (props) => {
-  const [polygons, setPolygons] = useState([...props.polygons]);
-  const [markers, setMarkers] = useState([...props.markers]);
+  const { polygons: savedPolygons, markers: savedMarkers, updateCluster } = props
+
+  const [polygons, setPolygons] = useState(savedPolygons);
+  const [markers, setMarkers] = useState(savedMarkers);
   const [isLoading, toggleLoading] = useState(false);
+  const eventsEmitter = useEvents()
 
   useEffect(() => {
-    setPolygons(props.polygons);
-    setMarkers(props.markers);
-  }, [props.polygons, props.markers]);
+    setPolygons(savedPolygons);
+    setMarkers(savedMarkers);
+  }, [savedPolygons, savedMarkers]);
 
   const onPolygonComplete = (polygon) => {
     const paths = polygon.getPath().getArray().map(p => ({
@@ -67,11 +71,24 @@ const AgroDrawingManager = (props) => {
     setMarkers(markersCopy);
   }
 
+  useEffect(() => {
+    const saveData = async () => {
+      toggleLoading(true);
+      await updateCluster(markers, polygons);
+      toggleLoading(false);
+    }
+
+    eventsEmitter.on('SAVE', saveData)
+    return () => {
+      eventsEmitter.off('SAVE', saveData)
+    }
+  }, [markers, polygons, toggleLoading])
+
   useHotkeys('ctrl+k', async () => {
     toggleLoading(true);
-    await props.updateCluster(markers, polygons);
+    await updateCluster(markers, polygons);
     toggleLoading(false);
-  }, [markers]);
+  }, [markers, polygons, toggleLoading]);
 
   return (
     <Fragment>

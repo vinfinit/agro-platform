@@ -1,7 +1,7 @@
 import Router from 'next/router'
-import React, { useState, Fragment } from 'react'
+import React, { useState } from 'react'
 import { Button, FormGroup, FormControl } from 'react-bootstrap'
-import GoogleLogin from 'react-google-login'
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google'
 
 import Loader from '../components/Loader'
 import config from '../config.json'
@@ -38,6 +38,7 @@ const Login = () => {
 
   const successGoogleAuth = async (response) => {
     toggleLoading(true);
+    console.log(response);
     const token = response.tokenId;
     const res = await fetch(`${API_URL}/api/auth/login?provider=google`, {
       headers: new Headers({
@@ -58,7 +59,7 @@ const Login = () => {
   }
 
   return (
-    <Fragment>
+    <GoogleOAuthProvider>
       {isLoading && <Loader />}
       <div className={`${styles.wrapper} fadeInDown`}>
         <div className={styles.login}>
@@ -66,8 +67,7 @@ const Login = () => {
             <GoogleLogin
               clientId={config.GOOGLE_IDENTITY_CLIENT_ID}
               onSuccess={successGoogleAuth}
-              onFailure={failGoogleAuth}
-              cookiePolicy={'single_host_origin'}
+              onError={failGoogleAuth}
             />
           </section>
           <section className={styles.separator}>
@@ -100,7 +100,7 @@ const Login = () => {
           }
         </div>
       </div>
-    </Fragment>
+    </GoogleOAuthProvider>
   );
 };
 

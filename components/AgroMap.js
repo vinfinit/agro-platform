@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState, useCallback } from 'react'
-import { GoogleMap, useLoadScript } from '@react-google-maps/api'
+import { GoogleMap, useJsApiLoader } from '@react-google-maps/api'
 
 import AgroDrawingManager from './AgroDrawingManager'
 import ControlPanel from './ControlPanel'
@@ -11,7 +11,8 @@ import config from '../config'
 const libraries = ['geometry', 'drawing'];
 
 const AgroMap = (props) => {
-  const { isLoaded, loadError } = useLoadScript({
+  const { isLoaded } = useJsApiLoader({
+    id: 'agro-platform-map',
     googleMapsApiKey: config.GMAP_API_KEY,
     libraries,
   });
@@ -64,7 +65,6 @@ const AgroMap = (props) => {
     <Fragment>
       {isLoaded && (
         <GoogleMap
-          id="agro-platform-map"
           mapContainerStyle={{
             height: "100%",
             width: "100%"

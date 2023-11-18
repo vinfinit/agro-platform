@@ -98,14 +98,14 @@ class StrokeFill extends Component {
 
     [...Array(n_lat_steps).keys()].forEach(i => {
       segments.push([
-        new Point(north - i*lat_step, west), 
-        new Point(north - i*lat_step + k*(east-west), east),
+        Point(north - i*lat_step, west), 
+        Point(north - i*lat_step + k*(east-west), east),
       ])
     });
     [...Array(n_lng_steps).keys()].forEach(i => {
       segments.push([
-        new Point(k > 0 ? south : north, west + i*lng_step), 
-        new Point(k > 0 ? north : south, west + i*lng_step + Math.abs((north-south)/k)),
+        Point(k > 0 ? south : north, west + i*lng_step), 
+        Point(k > 0 ? north : south, west + i*lng_step + Math.abs((north-south)/k)),
       ])
     });
     return segments
@@ -127,7 +127,7 @@ class StrokeFill extends Component {
       .filter(({ features }) => features.length)
       .map(({ features }) => features
         .map(({ geometry: { coordinates }}) => coordinates))
-      .map(intersection => intersection.map(([ lat, lng ]) => new Point(lat, lng)))
+      .map(intersection => intersection.map(([ lat, lng ]) => Point(lat, lng)))
   }
 
   getNormal = (k) => {
