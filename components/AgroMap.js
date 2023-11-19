@@ -76,7 +76,6 @@ const AgroMap = (props) => {
         >
           <FlaxCluster 
             cluster={props.cluster} 
-            nodeOnClick={() => {}} 
           />
           <AgroDrawingManager 
             polygons={fields}
