@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { useState } from 'react'
-import MathJax from 'react-mathjax2'
+import { MathJaxContext, MathJax } from 'better-react-mathjax'
 import { Button, Menu, MenuItem } from '@mui/material'
 import styles from '../styles/ControlPanel.module.scss'
 
@@ -9,6 +9,10 @@ const STATES = {
   LEGEND: 'Легенда',
   ALGORITHMS: 'Алгоритмы',
 }
+
+const mathJaxConfig = {
+  loader: { load: ["input/asciimath"] }
+};
 
 const ControlPanel = () => {
   const [menuAnchorEl, setMenuAnchorEl] = useState(null)
@@ -79,81 +83,68 @@ const ControlPanel = () => {
           </ul>
         </section>
     
-        {/* <section className={curState === STATES.ALGORITHMS ? '' : styles.hiddenItem}>
-          <MathJax.Context input='ascii'>
+        <MathJaxContext config={mathJaxConfig}>
+          <section className={curState === STATES.ALGORITHMS ? '' : styles.hiddenItem}>
             <section>
               <h3>Выбор оптимального направления для уборки комбайном</h3>
               <ol>
                 <li>
-                  <MathJax.Node inline>\forall p \in P | P</MathJax.Node> - множество сторон многоугольника, вычислить <MathJax.Node inline>k = \tan \alpha_p | \alpha_p</MathJax.Node> - угол наклона <MathJax.Node inline>p</MathJax.Node>
+                  <MathJax inline>{"`forall p \in P | P`"}</MathJax> - множество сторон многоугольника, вычислить <MathJax inline>{"`k = tan \alpha_p | \alpha_p`"}</MathJax> - угол наклона <MathJax inline>{"`p`"}</MathJax>
                 </li>
                 <li>
-                  <MathJax.Node inline>\forall p</MathJax.Node> создать кластер <MathJax.Node inline>{'C_p = {p, p_i, p_j, ...}'} | \alpha_p - 5° \le p_i, p_j \le \alpha_p + 5°</MathJax.Node>
+                  <MathJax inline>{"`forall p`"}</MathJax> создать кластер <MathJax inline>{"`{C_p = {p, p_i, p_j, ...}} | \alpha_p - 5° \le p_i, p_j \le \alpha_p + 5°`"}</MathJax>
                 </li>
                 <li>
-                  <MathJax.Node inline>\forall C_p</MathJax.Node> вычислить <MathJax.Node inline>{'L = \sum_{p \in C_p} l_p | l'}</MathJax.Node> - длина стороны <MathJax.Node inline>p</MathJax.Node>
+                  <MathJax inline>{"`forall C_p`"}</MathJax> вычислить <MathJax inline>{"`{L = \sum_{p \in C_p} l_p | l}`"}</MathJax> - длина стороны <MathJax inline>{"`p`"}</MathJax>
                 </li>
                 <li>
-                  Решение: <MathJax.Node inline>\alpha_p</MathJax.Node>, где <MathJax.Node inline>p \in C_p | L - max</MathJax.Node>
+                  Решение: <MathJax inline>{"`\alpha_p`"}</MathJax>, где <MathJax inline>{"`p \in C_p | L - max`"}</MathJax>
                 </li>
               </ol>
             </section>
-          </MathJax.Context>
-          <MathJax.Context input='ascii'>
+          
             <section>
               <h3>(L) Расчет полезного расстояния</h3>
-              <MathJax.Node>
-                L = (S (km^2)) / (HS (km)) km.
-              </MathJax.Node>
+              <MathJax>{"`L = (S (km^2)) / (HS (km)) km.`"}</MathJax>
             </section>
-          </MathJax.Context>
-          <MathJax.Context input='ascii'>
             <section>
               <h3>(N) Количество борозд</h3>
               <ol>
                 <li>Строим перпендикуляр к направлению уборки</li>
                 <li>Проецируем на этот перпендикуляр все остальные стороны</li>
                 <li>
-                  <div><MathJax.Node inline>LN</MathJax.Node> - сумма длин остальных сторон (пригодится для КПД)</div>
-                  <MathJax.Node inline>{'LN = (\sum l_{i}) | l_{i}'}</MathJax.Node> - длина i-ой стороны
+                  <div><MathJax inline>{"`LN`"}</MathJax> - сумма длин остальных сторон (пригодится для КПД)</div>
+                  <MathJax inline>{"`{LN = (\sum l_{i}) | l_{i}}`"}</MathJax> - длина i-ой стороны
                 </li>
                 <li>
-                  <div><MathJax.Node inline>LN_⊥</MathJax.Node> - сумма длин спроецированных сторон</div>
-                  <MathJax.Node inline>{'LN_⊥ = (\sum l_{i⊥}) | l_{i ⊥}'}</MathJax.Node> - длина i-ой спроецированной стороны
+                  <div><MathJax inline>{"`LN_⊥`"}</MathJax> - сумма длин спроецированных сторон</div>
+                  <MathJax inline>{"`{LN_⊥ = (\sum l_{i⊥}) | l_{i ⊥}}`"}</MathJax> - длина i-ой спроецированной стороны
                 </li>
                 <li>
-                  <MathJax.Node inline>N = (LN_⊥) / (2 * HS)</MathJax.Node>
+                  <MathJax inline>{"`N = (LN_⊥) / (2 * HS)`"}</MathJax>
                 </li>
               </ol>
               <h4>Пример:</h4>
               <Image src={require('../images/nExample.png')} height={200} width={200} alt="example" />
               <ol start='0'>
-                <li><MathJax.Node>GH</MathJax.Node> - направление уборки</li>
-                <li><MathJax.Node>g</MathJax.Node> - перпендикуляр к GH</li>
-                <li><MathJax.Node>b, c, d, f</MathJax.Node> - стороные, которые необходимо спроецировать на <MathJax.Node>g</MathJax.Node></li>
+                <li><MathJax inline>{"`GH`"}</MathJax> - направление уборки</li>
+                <li><MathJax inline>{"`g`"}</MathJax> - перпендикуляр к GH</li>
+                <li><MathJax inline>{"`b, c, d, f`"}</MathJax> - стороные, которые необходимо спроецировать на <MathJax inline>{"`g`"}</MathJax></li>
                 <li>
-                  <MathJax.Node inline>N = (h + i + j + (h + i +j)) / (2 * HS)</MathJax.Node>
+                  <MathJax inline>{"`N = (h + i + j + (h + i +j)) / (2 * HS)`"}</MathJax>
                 </li>
               </ol>
             </section>
-          </MathJax.Context>
-          <MathJax.Context input='ascii'>
             <section>
               <h3>(T) Расчет времени уборки поля</h3>
-              <MathJax.Node>
-                T = L / V + T_w.
-              </MathJax.Node>
+              <MathJax>{"`T = L / V + T_w.`"}</MathJax>
             </section>
-          </MathJax.Context>
-          <MathJax.Context input='ascii'>
             <section>
               <h3>(E) КПД поля</h3>
-              <MathJax.Node>
-                N_⊥ / N
-              </MathJax.Node>
+              <MathJax>{"`E = N_⊥ / N`"}</MathJax>
             </section>
-          </MathJax.Context>
-        </section> */}
+          </section>
+        </MathJaxContext>
       </section>
     </div>
   )
