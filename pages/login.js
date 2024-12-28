@@ -1,10 +1,9 @@
 import Router from 'next/router'
 import React, { useState } from 'react'
 import { Button, FormGroup, FormControl } from 'react-bootstrap'
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google'
+import { GoogleOAuthProvider } from '@react-oauth/google'
 
 import Loader from '../components/Loader'
-import config from '../config.json'
 import styles from '../styles/Login.module.scss'
 
 import { API_URL } from '../utils/constants'
@@ -36,40 +35,11 @@ const Login = () => {
     }
   }
 
-  const successGoogleAuth = async (response) => {
-    toggleLoading(true);
-    console.log(response);
-    const token = response.tokenId;
-    const res = await fetch(`${API_URL}/api/auth/login?provider=google`, {
-      headers: new Headers({
-        'Authorization': `Bearer ${token}`,
-      })
-    });
-
-    if (res.ok) {
-      Router.push('/dashboard');
-    } else {
-      setErrorLog(defaultError);
-      toggleLoading(false);
-    }
-  }
-
-  const failGoogleAuth = async (err) => {
-    console.error(err)
-  }
-
   return (
     <GoogleOAuthProvider>
       {isLoading && <Loader />}
       <div className={`${styles.wrapper} fadeInDown`}>
         <div className={styles.login}>
-          <section className={styles.socialNetwork}>
-            <GoogleLogin
-              clientId={config.GOOGLE_IDENTITY_CLIENT_ID}
-              onSuccess={successGoogleAuth}
-              onError={failGoogleAuth}
-            />
-          </section>
           <section className={styles.separator}>
             <hr/>
           </section>
