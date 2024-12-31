@@ -111,28 +111,8 @@ const ControlPanel = () => {
               <h3>(N) Количество борозд</h3>
               <ol>
                 <li>Строим перпендикуляр к направлению уборки</li>
-                <li>Проецируем на этот перпендикуляр все остальные стороны</li>
-                <li>
-                  <div><MathJax inline>{"`LN`"}</MathJax> - сумма длин остальных сторон (пригодится для КПД)</div>
-                  <MathJax inline>{"`{LN = (\sum l_{i}) | l_{i}}`"}</MathJax> - длина i-ой стороны
-                </li>
-                <li>
-                  <div><MathJax inline>{"`LN_⊥`"}</MathJax> - сумма длин спроецированных сторон</div>
-                  <MathJax inline>{"`{LN_⊥ = (\sum l_{i⊥}) | l_{i ⊥}}`"}</MathJax> - длина i-ой спроецированной стороны
-                </li>
-                <li>
-                  <MathJax inline>{"`N = (LN_⊥) / (2 * HS)`"}</MathJax>
-                </li>
-              </ol>
-              <h4>Пример:</h4>
-              <Image src={require('../images/nExample.png')} height={200} width={200} alt="example" />
-              <ol start='0'>
-                <li><MathJax inline>{"`GH`"}</MathJax> - направление уборки</li>
-                <li><MathJax inline>{"`g`"}</MathJax> - перпендикуляр к GH</li>
-                <li><MathJax inline>{"`b, c, d, f`"}</MathJax> - стороные, которые необходимо спроецировать на <MathJax inline>{"`g`"}</MathJax></li>
-                <li>
-                  <MathJax inline>{"`N = (h + i + j + (h + i +j)) / (2 * HS)`"}</MathJax>
-                </li>
+                <li>Находим самое широкое место в поле по направлению этого перпендикуляра</li>
+                <li>Делим это расстояние на ширину захвата</li>
               </ol>
             </section>
             <section>

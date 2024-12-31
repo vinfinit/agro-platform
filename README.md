@@ -32,7 +32,6 @@ P.S. it would be better to generate _config.json_ from secrets in CI/CD pipeline
 ### Run server
 
 ```bash
-npm i -g now
 npm install
-now run dev
+npm run dev
 ```

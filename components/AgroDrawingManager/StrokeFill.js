@@ -157,6 +157,69 @@ class StrokeFill extends Component {
     return [projectionLen, originLen];
   }
 
+  computePerpendicularDistance = (segmentStart, segmentEnd, point) => {
+    const xA = segmentStart.lat();
+    const yA = segmentStart.lng();
+    const xB = segmentEnd.lat();
+    const yB = segmentEnd.lng();
+    const xC = point.lat();
+    const yC = point.lng();
+
+    // Vector AB
+    const ABx = xB - xA;
+    const ABy = yB - yA;
+
+    // Vector AC
+    const ACx = xC - xA;
+    const ACy = yC - yA;
+
+    // Dot product of AC and AB
+    const dotProduct = ACx * ABx + ACy * ABy
+
+    // Dot product of AB with itself (AB·AB)
+    const ABLengthSquared = ABx * ABx + ABy * ABy
+
+    // Calculate the projection scalar (t)
+    const t = dotProduct / ABLengthSquared
+
+    // Calculate the coordinates of point D
+    const xD = xA + t * ABx;
+    const yD = yA + t * ABy;
+
+    // console.log('A', xA, yA)
+    // console.log('B', xB, yB)
+    // console.log('C', xC, yC)
+    // console.log('D', xD, yD)
+    // console.log('len', computeLength(point, Point(xD, yD)))
+
+    return computeLength(point, Point(xD, yD));
+  }
+
+  // Функция для вычисления самого длинного перпендикуляра по углу нормали
+  findLongestPerpendicularByNormal = (mainSegments, segments, k) => {
+    const kDegrees = arcTangent(k);
+    const segmentsForProjection = [];
+
+    segments.forEach(segment => {
+      if (!(segment.angle - ANGLE_WINDOW <= kDegrees &&
+        kDegrees <= segment.angle + ANGLE_WINDOW
+      )) {
+        segmentsForProjection.push(segment)
+      }
+    });
+
+    let maxDistance = 0;
+    mainSegments.forEach(mainSegment => {
+      segmentsForProjection.forEach(segment => {
+        const dA = this.computePerpendicularDistance(mainSegment.segment[0], mainSegment.segment[1], segment.segment[0])
+        const dB = this.computePerpendicularDistance(mainSegment.segment[0], mainSegment.segment[1], segment.segment[1])
+        maxDistance = Math.max(maxDistance, dA, dB)
+      })
+    })
+
+    return maxDistance;
+  }
+
   componentDidMount() {
     this.props.projectSegments(this.projectSegmentsData.projectionLen, this.projectSegmentsData.originLen);
   }
@@ -166,7 +229,10 @@ class StrokeFill extends Component {
 
     const rectWrapper = this.wrapPolygonIntoRectangle(googlePolygon);
     const polygonSegments = this.splitPolygonIntoSegments(googlePolygon);
-    const { k } = this.findBiggestSegmentCluster(polygonSegments);
+    const { segments: mainSegments, k } = this.findBiggestSegmentCluster(polygonSegments);
+    const longestPerpendicular = this.findLongestPerpendicularByNormal(mainSegments, polygonSegments, k)
+    console.log('longestPerpendicular ', longestPerpendicular)
+    this.props.setLongestPerpendicular(longestPerpendicular)
     const directionSegments = this.generateDirectionSegments(rectWrapper, k);
     const intersectSegments = this.computeIntersectSegments(directionSegments, googlePolygon);
 

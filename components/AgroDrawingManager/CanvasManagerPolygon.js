@@ -29,6 +29,7 @@ const CanvasManagerPolygon = (props) => {
   const [harvesterSize, setHarversterSize] = useState(HARVESTER_SIZE);
   const [workingSpeed, setWorkingSpeed] = useState(WORKING_SPEED);
   const [turnSpeed, setTurnSpeed] = useState(TURN_SPEED);
+  const [longestPerpendicular, setLongestPerpendicular] = useState(0)
   const [projectSegments, setProjectSegments] = useState(null);
   const [totalDistance, setTotalDistance] = useState(0);
   const [singleTurnDistance, setSingleTurnDistance] = useState(0);
@@ -38,11 +39,11 @@ const CanvasManagerPolygon = (props) => {
     if (activePolygon) {
       setTotalDistance(round(activePolygon.area / +harvesterSize));
       setSingleTurnDistance((+harvesterSize * 105) / 14 + 34);
-      if (projectSegments) {
-        setNLines(projectSegments.projectionLen / 2 / harvesterSize);
+      if (longestPerpendicular) {
+        setNLines(longestPerpendicular / harvesterSize);
       }
     }
-  }, [activePolygon, harvesterSize, projectSegments]);
+  }, [activePolygon, harvesterSize, longestPerpendicular]);
 
   const onPolygonClick = (polygon, index) => {
     const googlePolygon = new google.maps.Polygon({ paths: polygon });
@@ -74,6 +75,7 @@ const CanvasManagerPolygon = (props) => {
           projectSegments={
             (projectionLen, originLen) => setProjectSegments({ projectionLen, originLen })
           }
+          setLongestPerpendicular={setLongestPerpendicular}
         />
       }
       {activePolygon && 
