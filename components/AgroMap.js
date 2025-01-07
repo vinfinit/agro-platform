@@ -36,12 +36,13 @@ const AgroMap = (props) => {
   const [markers, setMarkers] = useState([]);
 
   useEffect(() => {
-    if (props.cluster._id !== activeCluster) {
-      loadCluster(props.cluster._id);
-      setActiveCluster(props.cluster._id);
+    console.log(`loading cluster ${props.cluster.name}`)
+    loadCluster(props.cluster._id);
+    setActiveCluster(props.cluster._id);
+    if (props.cluster.location) {
       setCenter(props.cluster.location);
     }
-  }, [props.cluster._id, activeCluster, props.cluster.location]);
+  }, [props.cluster._id, isLoaded]);
 
   const loadCluster = async (clusterId) => {
     const res = await fetch(`${API_URL}/api/cluster/${clusterId}`);
